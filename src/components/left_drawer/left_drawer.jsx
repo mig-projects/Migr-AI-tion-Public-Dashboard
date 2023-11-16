@@ -8,7 +8,7 @@ import {
   Toolbar, Typography
 } from "@mui/material";
 import {Search} from "@mui/icons-material";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import DiscordIcon from "../../assets/images/discord.svg";
 import Logo from "../../assets/images/logo.svg";
 import variables from "../../variables.module.scss";
@@ -16,6 +16,7 @@ import variables from "../../variables.module.scss";
 const LeftDrawer = () => {
   const width = 300;
   const location = useLocation();
+  const navigate = useNavigate();
 
   const routes = {
     'Home': '/home',
@@ -76,6 +77,9 @@ const LeftDrawer = () => {
             sx={{
               height: '50px',
               paddingInline: '30px',
+            }}
+            onClick={() => {
+              navigate(routes[routeName]);
             }}
           >
             <ListItemText>
