@@ -1,6 +1,10 @@
 // Colors
 $primary-purple: #7438E2;
 
+// Sizes
+$toolbar-height: 80px;
+
 :export {
   primaryPurple: $primary-purple;
+  toolbarHeight: $toolbar-height;
 }

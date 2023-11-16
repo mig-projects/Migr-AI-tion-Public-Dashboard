@@ -38,7 +38,7 @@ const LeftDrawer = () => {
   >
     <Toolbar
       sx={{
-        height: '80px',
+        height: variables.toolbarHeight,
       }}
     >
       <img src={Logo} alt="Migration logo" height={40} width={40} className={'me-4'} />
