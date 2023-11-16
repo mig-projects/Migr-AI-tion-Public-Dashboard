@@ -1,24 +1,37 @@
 import LeftDrawer from "../../components/left_drawer/left_drawer.jsx";
-import {Box, Link, Toolbar, Typography} from "@mui/material";
+import {
+  Box, Chip,
+  IconButton,
+  InputAdornment,
+  Link,
+  ListItem,
+  ListItemButton,
+  TextField,
+  Toolbar,
+  Typography
+} from "@mui/material";
 import variables from "../../variables.module.scss";
-import {ArrowForward, ArrowRight, ArrowRightAlt, KeyboardArrowRight} from "@mui/icons-material";
+import {ArrowForward, Search} from "@mui/icons-material";
+import DiscordIcon from "../../assets/images/discord.svg";
 
 const HomeScreen = () => {
   return <div id={`home-screen`}>
     <Box sx={{ display: 'flex' }}>
       <LeftDrawer />
+
       <Box component="main" sx={{
         flexGrow: 1,
-        p: 3,
         height: '100vh',
-      }}>
+      }}
+        className={`d-flex flex-column`}
+      >
         <Toolbar
           sx={{
             height: variables.toolbarHeight,
           }}
         />
 
-        <div className={`d-flex flex-column align-items-center justify-content-center`}>
+        <div className={`d-flex flex-column align-items-center justify-content-center flex-grow-1 p-3`}>
           <Typography
             className={'fw-bold fs-1 mb-4'}
           >
@@ -34,7 +47,7 @@ const HomeScreen = () => {
           </Typography>
 
           <Link
-            className={`text-decoration-none`}
+            className={`text-decoration-none mb-5`}
             href={'/about'}
           >
             <Typography paragraph
@@ -46,8 +59,59 @@ const HomeScreen = () => {
               Learn more {<ArrowForward sx={{fontSize: '15px', marginBottom: '2px'}} />}
             </Typography>
           </Link>
+
+          <TextField
+            sx={{
+              marginInline: '15px',
+            }}
+            className={`mb-4`}
+            label="Search"
+            InputProps={{
+              style: {
+                borderRadius: '12px',
+                width: '400px',
+              },
+              endAdornment: <InputAdornment position="end">
+                <IconButton
+                  edge="end"
+                >
+                  <Search />
+                </IconButton>
+              </InputAdornment>,
+            }}
+          />
+
+          <div className={`d-flex gap-2`}>
+            <Chip
+              label="Women"
+              onClick={() => {}}
+            />
+            <Chip
+              label="Migrant"
+              onClick={() => {}}
+            />
+            <Chip
+              label="Parent"
+              onClick={() => {}}
+            />
+          </div>
+
+          <div style={{height: '100px'}}/>
         </div>
 
+
+        <ListItem disablePadding>
+          <ListItemButton
+            sx={{
+              height: '70px',
+            }}
+            className={`d-flex justify-content-center`}
+          >
+            <Typography>
+              Want to be part of the research? Contribute {<ArrowForward sx={{fontSize: '15px', marginBottom: '2px'}} />}
+            </Typography>
+          </ListItemButton>
+        </ListItem>
       </Box>
     </Box>
   </div>

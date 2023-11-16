@@ -94,6 +94,7 @@ const LeftDrawer = () => {
       <ListItemButton
         sx={{
           height: '70px',
+          paddingInline: '20px',
         }}
         className={`d-flex align-items-center justify-content-between`}
       >
