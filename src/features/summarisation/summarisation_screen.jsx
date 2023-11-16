@@ -48,7 +48,7 @@ const SummarisationScreen = () => {
                   <Card
                     variant="outlined"
                     sx={{
-                      backgroundColor: '#f9f5ff',
+                      backgroundColor: '#faf7ff',
                       border: '1.5px solid rgba(116, 56, 226, 0.10)',
                     }}
                   >
