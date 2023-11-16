@@ -28,7 +28,7 @@ const HomeScreen = () => {
           }}
         />
 
-        <div className={`d-flex flex-column align-items-center justify-content-center flex-grow-1 p-3`}>
+        <div className={`d-flex flex-column align-items-center flex-grow-1 p-5`}>
           <Typography
             className={'fw-bold fs-1 mb-4'}
           >
@@ -92,8 +92,6 @@ const HomeScreen = () => {
               onClick={() => {}}
             />
           </div>
-
-          <div style={{height: '100px'}}/>
         </div>
 
 
