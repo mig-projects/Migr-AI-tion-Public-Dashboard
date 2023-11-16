@@ -1,7 +1,18 @@
 import DrawerWrapper from "../drawer_wrapper.jsx";
-import {Box, Card, CardContent, Chip, ListItem, ListItemButton, Toolbar, Typography} from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  ListItem,
+  ListItemButton,
+  Toolbar,
+  Tooltip,
+  Typography
+} from "@mui/material";
 import variables from "../../variables.module.scss";
-import {ArrowForward} from "@mui/icons-material";
+import {ArrowForward, Info, InfoOutlined} from "@mui/icons-material";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/scss';
 
@@ -98,6 +109,21 @@ const SummarisationScreen = () => {
               })
             }
           </Swiper>
+
+          <div className={`d-flex align-items-center justify-content-between mt-4 mb-3 mx-4 mb-3`}>
+            <Typography className={`me-2`}>
+              Summary
+            </Typography>
+
+            <Tooltip title="This LLM-generated summary is a demo of an interesting idea. We'll let you know when its ready to be taken seriously. :)" arrow>
+              <IconButton>
+                <InfoOutlined style={{
+                  fontSize: '18px',
+                }} />
+              </IconButton>
+            </Tooltip>
+          </div>
+
         </div>
 
         <ListItem disablePadding
