@@ -59,8 +59,8 @@ const SummarisationScreen = () => {
                   <Card
                     variant="outlined"
                     sx={{
-                      backgroundColor: '#faf7ff',
-                      border: '1.5px solid rgba(116, 56, 226, 0.10)',
+                      background: 'linear-gradient(to bottom right, rgba(116, 56, 226, 0.05), rgba(116, 56, 226, 0.13))',
+                      border: '1.5px solid rgba(116, 56, 226, 0.1)',
                     }}
                   >
                     <CardContent
