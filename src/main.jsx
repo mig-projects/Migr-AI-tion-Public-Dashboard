@@ -11,11 +11,12 @@ import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
 import '@fontsource/inter/800.css';
 import '@fontsource/inter/900.css';
-import {ThemeProvider} from "@mui/material";
+import {CssBaseline, ThemeProvider} from "@mui/material";
 import {lightTheme} from "./assets/theme/theme.js";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+    <CssBaseline />
     <ThemeProvider theme={lightTheme}>
       <App />
     </ThemeProvider>
