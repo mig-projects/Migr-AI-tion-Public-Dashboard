@@ -124,6 +124,15 @@ const SummarisationScreen = () => {
             </Tooltip>
           </div>
 
+          <Card
+            className={`mx-4 p-4 mb-4`}
+            variant="outlined"
+          >
+            <Typography paragraph>
+              Lorem ipsum dolor sit amet consectetur. Tellus maecenas in pharetra pharetra volutpat id. Egestas elit risus urna feugiat eleifend mattis sed. Tellus quis condimentum egestas id habitant adipiscing vel massa placerat. Quis tincidunt faucibus diam nunc eu in. Sed nam eget dictum porttitor ullamcorper ultricies volutpat. Mi eleifend aliquam varius id tellus diam nulla odio adipiscing. Diam vitae a neque proin mattis viverra. Integer nec eget in turpis velit porta vestibulum. Dolor sit id sit quam egestas ut. Lorem ipsum dolor sit amet consectetur. Tellus maecenas in pharetra pharetra volutpat id. Egestas elit risus urna feugiat eleifend mattis sed. Tellus quis condimentum egestas id habitant adipiscing vel massa placerat. Quis tincidunt faucibus diam nunc eu in. Sed nam eget dictum porttitor ullamcorper ultricies volutpat. Mi eleifend aliquam varius id tellus diam nulla odio adipiscing. Diam vitae a neque proin mattis viverra. Integer nec eget in turpis velit porta vestibulum. Dolor sit id sit quam egestas ut.
+            </Typography>
+          </Card>
+
         </div>
 
         <ListItem disablePadding
