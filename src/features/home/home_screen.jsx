@@ -28,7 +28,7 @@ const HomeScreen = () => {
           }}
         />
 
-        <div className={`d-flex flex-column align-items-center flex-grow-1 p-5`}>
+        <div className={`d-flex flex-column align-items-center flex-grow-1 p-4`}>
           <Typography
             className={'fw-bold fs-1 mb-4'}
           >

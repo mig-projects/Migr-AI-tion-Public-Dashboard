@@ -20,7 +20,7 @@ const LeftDrawer = () => {
 
   const routes = {
     'Home': '/home',
-    'Knowledge Graph': '/knowledge-graph',
+    'Summarisation': '/summarisation',
     'About': '/about',
   }
 
