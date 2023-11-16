@@ -1,4 +1,3 @@
-import LeftDrawer from "../../components/left_drawer/left_drawer.jsx";
 import {
   Box, Chip,
   IconButton,
@@ -12,16 +11,14 @@ import {
 } from "@mui/material";
 import variables from "../../variables.module.scss";
 import {ArrowForward, Search} from "@mui/icons-material";
-import DiscordIcon from "../../assets/images/discord.svg";
+import DrawerWrapper from "../drawer_wrapper.jsx";
 
 const HomeScreen = () => {
   return <div id={`home-screen`}>
-    <Box sx={{ display: 'flex' }}>
-      <LeftDrawer />
-
+    <DrawerWrapper>
       <Box component="main" sx={{
         flexGrow: 1,
-        height: '100vh',
+        minHeight: '100vh',
       }}
         className={`d-flex flex-column`}
       >
@@ -113,7 +110,7 @@ const HomeScreen = () => {
           </ListItemButton>
         </ListItem>
       </Box>
-    </Box>
+    </DrawerWrapper>
   </div>
 }
 
