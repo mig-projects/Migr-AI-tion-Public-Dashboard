@@ -12,7 +12,7 @@ import {
   Typography
 } from "@mui/material";
 import variables from "../../variables.module.scss";
-import {ArrowForward, Info, InfoOutlined} from "@mui/icons-material";
+import {ArrowForward, InfoOutlined} from "@mui/icons-material";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/scss';
 
