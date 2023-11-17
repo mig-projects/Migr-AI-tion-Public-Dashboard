@@ -7,6 +7,7 @@ import {
 import HomeScreen from "./features/home/home_screen.jsx";
 import AboutScreen from "./features/about/about_screen.jsx";
 import SummarisationScreen from "./features/summarisation/summarisation_screen.jsx";
+import KnowledgeGraphScreen from "./features/knowledge_graph/knowledge_graph_screen.jsx";
 
 // This component is used to render the correct page based on the URL
 const Routing = () => {
@@ -14,6 +15,7 @@ const Routing = () => {
     <Route path="/home" element={<HomeScreen />} />
     <Route path="/about" element={ <AboutScreen /> } />
     <Route path="/summarisation" element={ <SummarisationScreen /> } />
+    <Route path="/knowledge-graph" element={ <KnowledgeGraphScreen /> } />
     <Route path="*" element={ <Navigate to={'/home'} /> } />
   </Routes>;
 }
