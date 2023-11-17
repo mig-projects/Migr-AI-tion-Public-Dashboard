@@ -2,6 +2,8 @@ import DrawerWrapper from "../drawer_wrapper.jsx";
 import {Box, ListItem, ListItemButton, Toolbar, Typography} from "@mui/material";
 import variables from "../../variables.module.scss";
 import {ArrowForward} from "@mui/icons-material";
+import EuFounded from "../../assets/images/eu_founded.png";
+import FindHr from "../../assets/images/findhr.png";
 
 const AboutScreen = () => {
   return <div id={`about-screen`}>
@@ -44,6 +46,15 @@ const AboutScreen = () => {
           <Typography paragraph>
             Mission
           </Typography>
+
+          <div className={`flex-grow-1`}>
+
+          </div>
+
+          <div className={`d-flex justify-content-end`}>
+            <img src={EuFounded} alt=""/>
+            <img src={FindHr} alt=""/>
+          </div>
         </div>
 
         <ListItem disablePadding
