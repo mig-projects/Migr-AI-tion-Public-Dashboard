@@ -12,8 +12,11 @@ import {
 import variables from "../../variables.module.scss";
 import {ArrowForward, Search} from "@mui/icons-material";
 import DrawerWrapper from "../drawer_wrapper.jsx";
+import {useNavigate} from "react-router-dom";
 
 const HomeScreen = () => {
+  const navigate = useNavigate();
+
   return <div id={`home-screen`}>
     <DrawerWrapper>
       <Box component="main" sx={{
@@ -57,39 +60,53 @@ const HomeScreen = () => {
             </Typography>
           </Link>
 
-          <TextField
-            sx={{
-              marginInline: '15px',
+          <Box
+            component="form"
+            onSubmit={() => {
+              navigate('/summarisation');
             }}
-            className={`mb-4`}
-            label="Search"
-            InputProps={{
-              style: {
-                borderRadius: '12px',
-                width: '400px',
-              },
-              endAdornment: <InputAdornment position="end">
-                <IconButton
-                  edge="end"
-                >
-                  <Search />
-                </IconButton>
-              </InputAdornment>,
-            }}
-          />
+          >
+            <TextField
+              required
+              sx={{
+                marginInline: '15px',
+              }}
+              className={`mb-4`}
+              label="Search"
+              InputProps={{
+                style: {
+                  borderRadius: '12px',
+                  width: '400px',
+                },
+                endAdornment: <InputAdornment position="end">
+                  <IconButton
+                    edge="end"
+                  >
+                    <Search />
+                  </IconButton>
+                </InputAdornment>,
+              }}
+            />
+          </Box>
 
           <div className={`d-flex gap-2`}>
             <Chip
               label="Women"
-              onClick={() => {}}
+              onClick={() => {
+                navigate('/summarisation');
+              }}
             />
             <Chip
               label="Migrant"
-              onClick={() => {}}
+              onClick={() => {
+                navigate('/summarisation');
+              }}
             />
             <Chip
               label="Parent"
-              onClick={() => {}}
+              onClick={() => {
+                navigate('/summarisation');
+              }}
             />
           </div>
         </div>
