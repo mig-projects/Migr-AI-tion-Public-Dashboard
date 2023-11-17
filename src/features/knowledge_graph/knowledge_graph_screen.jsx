@@ -1,7 +1,7 @@
 import ReactEcharts from "echarts-for-react";
 import variables from "../../variables.module.scss";
 import DrawerWrapper from "../drawer_wrapper.jsx";
-import {Box, Toolbar} from "@mui/material";
+import {Box, FormControl, InputLabel, ListItemText, ListSubheader, MenuItem, Select, Toolbar} from "@mui/material";
 import {useEffect, useState} from "react";
 
 const categories = [
@@ -108,6 +108,7 @@ const KnowledgeGraphScreen = () => {
           name: value,
           symbol: "circle",
           category: 2,
+          symbolSize: [15, 15],
         });
       });
     });
@@ -185,6 +186,7 @@ const KnowledgeGraphScreen = () => {
     ],
   };
 
+  const [selectedValue, setSelectedValue] = useState('');
 
   return (
     <div id={'knowledge-graph-screen'}>
@@ -198,9 +200,45 @@ const KnowledgeGraphScreen = () => {
         >
           <Toolbar
             sx={{
-              height: variables.toolbarHeight,
+              height: '130px',
             }}
           >
+            <FormControl>
+              <InputLabel>Tag</InputLabel>
+              <Select
+                label="Tag"
+                sx={{
+                  '.MuiOutlinedInput-notchedOutline': { border: 0 },
+                  minWidth: '200px',
+                }}
+                value={selectedValue}
+                onChange={(event) => {
+                  console.log(event.target.value);
+                  setSelectedValue(event.target.value);
+                }}
+                displayEmpty
+                inputProps={{ outline: "none" }}
+                renderValue={(selected) => selected}
+                MenuProps={{
+                  PaperProps: {
+                    elevation: 0,
+                  },
+                }}
+              >
+                {
+                  Object.keys(tagCategories).map((name) => (
+                      [
+                        <ListSubheader key={name}>{name}</ListSubheader >,
+                        tagCategories[name].tags.map((tag) => (
+                          <MenuItem key={tag} value={tag}>
+                            <ListItemText primary={tag} className={`ps-3`}/>
+                          </MenuItem>
+                        ))
+                        ]
+                  ))
+                }
+              </Select>
+            </FormControl>
           </Toolbar>
 
           <div className={`d-flex flex-column flex-grow-1`}>
