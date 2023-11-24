@@ -277,7 +277,9 @@ const KnowledgeGraphScreen = () => {
             color={'grey'}
           />
 
-          <div className={`d-flex gap-5 align-items-center py-3 px-4`}>
+          <div className={`d-flex gap-5 align-items-center px-4`} style={{
+            height: '70px',
+          }}>
             <BottomInfo
               color={categoriesColor}
               text={'Categories'}
