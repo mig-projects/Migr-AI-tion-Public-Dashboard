@@ -7,7 +7,7 @@ const categories = [
   "Company Values & Exploitation","Discrimination in HR","Cross-cultural Communication","Migration Journey","Psychological burden","Bureaucratic Barriers","Lateral Career Development","Promotion","Career Transition"
 ];
 
-const tagCategories = {
+const tagGroups = {
   Gender: {
     tags: ["Female","Male","Non-binary","Transgender"],
     links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden"],
@@ -67,6 +67,10 @@ const tagCategories = {
 };
 
 const KnowledgeGraphScreen = () => {
+  const tagsColor = '#bfe7c4';
+  const tagGroupsColor = '#a8d1f7';
+  const categoriesColor = '#bcabff';
+
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
 
@@ -74,33 +78,54 @@ const KnowledgeGraphScreen = () => {
     const newNodes = [
       ...categories.map((category) => {
         return {
+          z: 10,
           name: category,
-          symbol: "circle",
           category: 0,
-          symbolSize: [60, 60],
+          symbolSize: 50,
+          label: {
+            fontSize: 12,
+            fontWeight: '600',
+          },
+          itemStyle: {
+            color: categoriesColor,
+          }
         };
       }),
 
-      ...Object.keys(tagCategories).map((tag) => {
+      ...Object.keys(tagGroups).map((tag) => {
         return {
+          z: 5,
           name: tag,
-          symbol: "circle",
           category: 1,
-          symbolSize: [30, 30],
+          symbolSize: 25,
+          label: {
+            fontSize: 12,
+            fontWeight: '500',
+          },
+          itemStyle: {
+            color: tagGroupsColor,
+          }
         }
       }),
     ];
 
-    Object.keys(tagCategories).map((tag) => {
-      tagCategories[tag].tags.map((value) => {
+    Object.keys(tagGroups).map((tag) => {
+      tagGroups[tag].tags.map((value) => {
         if (newNodes.find((node) => node.name === value)) {
           return;
         }
         newNodes.push({
           name: value,
-          symbol: "circle",
           category: 2,
-          symbolSize: [15, 15],
+          symbolSize: 15,
+          label: {
+            fontSize: 10,
+            color: '#657a68',
+            opacity: 0.8,
+          },
+          itemStyle: {
+            color: tagsColor,
+          }
         });
       });
     });
@@ -111,20 +136,40 @@ const KnowledgeGraphScreen = () => {
   useEffect(() => {
     const newLinks = [];
 
-    Object.keys(tagCategories).map((tag) => {
-      tagCategories[tag].links.map((link) => {
+    Object.keys(tagGroups).map((tagGroup) => {
+      tagGroups[tagGroup].links.map((category) => {
         newLinks.push({
-          source: tag,
-          target: link,
+          source: category,
+          target: tagGroup,
+          lineStyle: {
+            color: {
+              type: 'linear',
+              colorStops: [{
+                offset: 0, color: categoriesColor // color at 0%
+              }, {
+                offset: 1, color: tagGroupsColor // color at 100%
+              }],
+            },
+          },
         });
       });
     });
 
-    Object.keys(tagCategories).map((tag) => {
-      tagCategories[tag].tags.map((value) => {
+    Object.keys(tagGroups).map((tagGroup) => {
+      tagGroups[tagGroup].tags.map((tag) => {
         newLinks.push({
-          source: tag,
-          target: value,
+          source: tagGroup,
+          target: tag,
+          lineStyle: {
+            color: {
+              type: 'linear',
+              colorStops: [{
+                offset: 0, color: tagGroupsColor // color at 0%
+              }, {
+                offset: 1, color: tagsColor // color at 100%
+              }],
+            },
+          },
         });
       });
     });
@@ -133,47 +178,39 @@ const KnowledgeGraphScreen = () => {
   }, []);
 
   const options = {
-    animation: false,
     title: {
       display: false,
     },
-    tooltip: {
-      trigger: "item",
-      formatter: function (params) {
-        return params.data.type + ": " + params.data.name;
-      },
-    },
+    tooltip: {},
     series: [
       {
         type: "graph",
         layout: "force",
         data: nodes,
         links: links,
-        categories: [
-          {
-            name: "Category",
-          },
-          {
-            name: "Tag",
-          },
-          {
-            name: "Value",
-          }
-        ],
+        symbol: 'circle',
         roam: true,
         label: {
           show: true,
-          position: "right",
-          formatter: "{b}",
+          position: 'right',
+          formatter: '{b}'
+        },
+        emphasis: {
+          focus: 'adjacency',
+          scale: true,
+        },
+        lineStyle: {
+          curveness: 0.03,
+          width: 1.5,
+        },
+        edgeLabel: {
+          formatter: '{c}',
         },
         force: {
-          initLayout: null,
-          repulsion: 500,
-          edgeLength: [100, 100],
-          friction: 0.1,
-          gravity: 0.1,
+          edgeLength: 30,
+          repulsion: 1000,
+          friction: 0.2,
         },
-        selectedMode: "single",
       },
     ],
   };
@@ -192,7 +229,7 @@ const KnowledgeGraphScreen = () => {
         >
           <Toolbar
             sx={{
-              height: '130px',
+              height: '70px',
             }}
           >
             <FormControl>
@@ -218,10 +255,10 @@ const KnowledgeGraphScreen = () => {
                 }}
               >
                 {
-                  Object.keys(tagCategories).map((name) => (
+                  Object.keys(tagGroups).map((name) => (
                       [
                         <ListSubheader key={name}>{name}</ListSubheader >,
-                        tagCategories[name].tags.map((tag) => (
+                        tagGroups[name].tags.map((tag) => (
                           <MenuItem key={tag} value={tag}>
                             <ListItemText primary={tag} className={`ps-3`}/>
                           </MenuItem>
@@ -235,6 +272,8 @@ const KnowledgeGraphScreen = () => {
 
           <div className={`d-flex flex-column flex-grow-1`}>
             <ReactEcharts
+              notMerge={true}
+              lazyUpdate={true}
               option={options}
               className={'flex-grow-1 h-100 w-100'}
             />
