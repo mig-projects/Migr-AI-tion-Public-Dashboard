@@ -1,75 +1,67 @@
 import ReactEcharts from "echarts-for-react";
-import variables from "../../variables.module.scss";
 import DrawerWrapper from "../drawer_wrapper.jsx";
 import {Box, FormControl, InputLabel, ListItemText, ListSubheader, MenuItem, Select, Toolbar} from "@mui/material";
 import {useEffect, useState} from "react";
 
 const categories = [
-  'Company Values & Exploitation',
-  'Discrimination in HR',
-  'Cross-cultural Communication',
-  'Migration Journey',
-  'Psychological burden',
-  'Bureaucratic Barriers',
+  "Company Values & Exploitation","Discrimination in HR","Cross-cultural Communication","Migration Journey","Psychological burden","Bureaucratic Barriers","Lateral Career Development","Promotion","Career Transition"
 ];
 
 const tagCategories = {
   Gender: {
-    tags: ['Female', 'Male', 'Non-binary', 'Transgender'],
-    links: ['Psychological burden', 'Discrimination in HR'],
+    tags: ["Female","Male","Non-binary","Transgender"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden"],
   },
   Age: {
-    tags: ['40+ years old', 'Youthful Look'],
-    links: ['Psychological burden', 'Discrimination in HR', 'Bureaucratic Barriers'],
+    tags: ["40+ years old","Youthful Look"],
+    links: ["Discrimination in HR", "Psychological burden", "Lateral Career Development", "Promotion", "Career Transition"],
   },
   Profession: {
-    tags: ['Tech worker', 'Entrepreneurs', 'Linguist', 'Data people', 'Data science teachers', 'Data scientists', 'Mini-jobbers', 'Public Speakers',
-      'Job searchers', 'Non-technical but IT', 'PRODUCT MANAGERS', 'People Experience or EX People', 'Data scientists', 'PRODUCT MANAGERS', 'HR people',
-      'Engineer', 'IT people', 'Unemployed', 'Consultants', 'STARTUP EMPLOYEES'],
-    links: ['Company Values & Exploitation', 'Discrimination in HR', 'Cross-cultural Communication']
+    tags: ["Tech worker","Entrepreneurs","Linguist","Data people","Data science teachers","Data scientists","Mini-jobbers","Public Speakers","Job searchers","Non-technical but IT","PRODUCT MANAGERS","People Experience or EX People","HR people","Engineer","IT people","Unemployed","STARTUP EMPLOYEES"],
+    links: ["Company Values & Exploitation", "Discrimination in HR", "Cross-cultural Communication", "Lateral Career Development", "Promotion", "Career Transition"]
   },
   Disability: {
-    tags: ['Neurodivergent', 'ADHD', 'Dyslexia', 'Autism'],
-    links: ['Psychological burden', 'Discrimination in HR', 'Bureaucratic Barriers'],
+    tags: ["Neurodivergent","ADHD","Dyslexia","Autism"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden", "Bureaucratic Barriers"],
   },
   Ethnicity: {
-    tags: ['Latin American', 'Eastern European', 'North American', 'South Asian', 'East Asian', 'Middle Eastern/West Asian', 'African'],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey"],
+    tags: ["Latin American","Eastern European","North American","South Asian","East Asian","Middle Eastern/West Asian","African"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
   },
   Religion: {
-    tags: ['Christian', 'Muslim', 'Jewish', 'Hindu', 'Buddhist'],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey"],
+    tags: ["Christian","Muslim","Jewish","Hindu","Buddhist"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
   },
   Sexuality: {
-    tags: ['LGBTIQ+', 'Heterosexual'],
-    links: ["Discrimination in HR", "Psychological burden"],
+    tags: ["LGBTIQ+","Heterosexual"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
   },
   'Family Status': {
-    tags: ['Mother', 'Father', 'Parent'],
-    links: ["Discrimination in HR", "Migration Journey", "Psychological burden"],
+    tags: ["Mother","Father","Parent"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden", "Bureaucratic Barriers", "Lateral Career Development", "Promotion", "Career Transition"],
   },
   'Professional level': {
-    tags: ['Entry level', 'Mid level', 'Senior level', 'Executive', 'Freelancer', 'Business Owner', 'Consultants', 'Startup Founder'],
-    links: ["Company Values & Exploitation", "Discrimination in HR"],
+    tags: ["Entry level","Mid level","Senior level","Executive","Freelancer","Business Owner","Consultants","Startup Founder"],
+    links: ["Discrimination in HR", "Lateral Career Development", "Promotion", "Career Transition"],
   },
   'Migration & Residence Status': {
-    tags: ['EU National', 'Non-EU National', 'Non-German', 'Permanent resident', 'Newcomer', 'Resident', 'Blue Card', 'Work Permit', 'Displaced or Stateless', 'Migrant'],
-    links: ["Discrimination in HR", "Migration Journey", "Bureaucratic Barriers"],
+    tags: ["EU National","Non-EU National","Non-German","Permanent resident","Newcomer","Resident","Blue Card","Work Permit","Displaced or Stateless","Migrant"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
   },
   'Language proficiency': {
-    tags: ['Multilingual', 'English-speaker', 'German Level A1', 'German Level A2', 'German Level B1', 'German Level B2', 'Non-German speaker', 'Native English-speaker'],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey"],
-  },
-  Education: {
-    tags: ['Educated in EU', 'Educated outside of Germany', 'Educated in Germany'],
+    tags: ["Multilingual","English-speaker","German Level A1","German Level A2","German Level B1","German Level B2","Non-German speaker","Native English-speaker"],
     links: ["Discrimination in HR", "Cross-cultural Communication", "Bureaucratic Barriers"],
   },
+  Education: {
+    tags: ["Educated in EU","Educated outside of Germany","Educated in Germany"],
+    links: ["Discrimination in HR", "Cross-cultural Communication", "Bureaucratic Barriers", "Lateral Career Development", "Promotion", "Career Transition"],
+  },
   Name: {
-    tags: ['Non-Western Name', 'Western name', 'Western name with Non-English Characters'],
+    tags: ["Non-Western Name","Western name","Western name with Non-English Characters"],
     links: ["Discrimination in HR", "Cross-cultural Communication"],
   },
   Appearance: {
-    tags: ['Person of Color', 'Caucasian White'],
+    tags: ["Person of Color","Caucasian White"],
     links: ["Discrimination in HR", "Cross-cultural Communication"],
   },
 };
