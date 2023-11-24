@@ -141,16 +141,6 @@ const KnowledgeGraphScreen = () => {
         newLinks.push({
           source: category,
           target: tagGroup,
-          lineStyle: {
-            color: {
-              type: 'linear',
-              colorStops: [{
-                offset: 0, color: categoriesColor // color at 0%
-              }, {
-                offset: 1, color: tagGroupsColor // color at 100%
-              }],
-            },
-          },
         });
       });
     });
@@ -160,16 +150,6 @@ const KnowledgeGraphScreen = () => {
         newLinks.push({
           source: tagGroup,
           target: tag,
-          lineStyle: {
-            color: {
-              type: 'linear',
-              colorStops: [{
-                offset: 0, color: tagGroupsColor // color at 0%
-              }, {
-                offset: 1, color: tagsColor // color at 100%
-              }],
-            },
-          },
         });
       });
     });
@@ -200,8 +180,8 @@ const KnowledgeGraphScreen = () => {
           scale: true,
         },
         lineStyle: {
-          curveness: 0.03,
-          width: 1.5,
+          curveness: 0.02,
+          width: 0.7,
         },
         edgeLabel: {
           formatter: '{c}',
