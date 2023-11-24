@@ -280,13 +280,13 @@ const KnowledgeGraphScreen = () => {
           <div className={`d-flex gap-5 align-items-center py-3 px-4`}>
             <BottomInfo
               color={categoriesColor}
-              text={'Category'}
+              text={'Categories'}
               tooltipText={'These are the main categories of the stories'}
             />
 
             <BottomInfo
               color={tagGroupsColor}
-              text={'Tag Group'}
+              text={'Tag Groups'}
               tooltipText={'These are the tags that are grouped together'}
             />
 
