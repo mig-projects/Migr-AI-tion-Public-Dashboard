@@ -1,7 +1,19 @@
 import ReactEcharts from "echarts-for-react";
 import DrawerWrapper from "../drawer_wrapper.jsx";
-import {Box, FormControl, InputLabel, ListItemText, ListSubheader, MenuItem, Select, Toolbar} from "@mui/material";
+import {
+  Box, Divider,
+  FormControl, IconButton,
+  InputLabel,
+  ListItemText,
+  ListSubheader,
+  MenuItem,
+  Select,
+  Toolbar,
+  Typography
+} from "@mui/material";
 import {useEffect, useState} from "react";
+import {Circle, InfoOutlined} from "@mui/icons-material";
+import BottomInfo from "./components/bottom_info.jsx";
 
 const categories = [
   "Company Values & Exploitation","Discrimination in HR","Cross-cultural Communication","Migration Journey","Psychological burden","Bureaucratic Barriers","Lateral Career Development","Promotion","Career Transition"
@@ -250,6 +262,10 @@ const KnowledgeGraphScreen = () => {
             </FormControl>
           </Toolbar>
 
+          <Divider
+            color={'grey'}
+          />
+
           <div className={`d-flex flex-column flex-grow-1`}>
             <ReactEcharts
               notMerge={true}
@@ -259,6 +275,29 @@ const KnowledgeGraphScreen = () => {
             />
           </div>
 
+          <Divider
+            color={'grey'}
+          />
+
+          <div className={`d-flex gap-5 align-items-center py-3 px-4`}>
+            <BottomInfo
+              color={categoriesColor}
+              text={'Category'}
+              tooltipText={'These are the main categories of the stories'}
+            />
+
+            <BottomInfo
+              color={tagGroupsColor}
+              text={'Tag Group'}
+              tooltipText={'These are the tags that are grouped together'}
+            />
+
+            <BottomInfo
+              color={tagsColor}
+              text={'Tags'}
+              tooltipText={'These are the tags that are used in the stories'}
+            />
+          </div>
         </Box>
       </DrawerWrapper>
     </div>
