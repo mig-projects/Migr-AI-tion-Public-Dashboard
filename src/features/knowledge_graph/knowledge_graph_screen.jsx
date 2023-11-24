@@ -2,17 +2,15 @@ import ReactEcharts from "echarts-for-react";
 import DrawerWrapper from "../drawer_wrapper.jsx";
 import {
   Box, Divider,
-  FormControl, IconButton,
+  FormControl,
   InputLabel,
   ListItemText,
   ListSubheader,
   MenuItem,
   Select,
   Toolbar,
-  Typography
 } from "@mui/material";
 import {useEffect, useState} from "react";
-import {Circle, InfoOutlined} from "@mui/icons-material";
 import BottomInfo from "./components/bottom_info.jsx";
 
 const categories = [
