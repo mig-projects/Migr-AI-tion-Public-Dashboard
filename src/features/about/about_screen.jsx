@@ -4,6 +4,9 @@ import variables from "../../variables.module.scss";
 import {ArrowForward} from "@mui/icons-material";
 import EuFounded from "../../assets/images/eu_founded.png";
 import FindHr from "../../assets/images/findhr.png";
+import logo1 from "../../assets/images/logo1.png";
+import logo2 from "../../assets/images/logo2.png";
+import logo3 from "../../assets/images/logo3.jpg";
 
 const AboutScreen = () => {
   return <div id={`about-screen`}>
@@ -70,7 +73,29 @@ const AboutScreen = () => {
             minHeight: '100px',
           }}/>
 
-          <div className={`d-flex justify-content-end`}>
+          <div className={`d-flex justify-content-end align-items-center gap-3`}>
+            <div className={`d-flex flex-column`}>
+              <img src={logo1} alt="" style={{
+                height: '100px',
+                objectFit: 'contain',
+              }}/>
+              <Typography
+                style={{
+                  marginLeft: '30px',
+                  fontSize: '10px',
+                  fontWeight: 'bold',
+                }}
+                width={'100px'}
+              >
+                gefördert von 1.3.21 bis 31.8.21 unter dem FKZ 01IS21S27
+              </Typography>
+            </div>
+            <img src={logo2} alt="" style={{
+              height: '100px',
+            }}/>
+            <img src={logo3} alt="" style={{
+              height: '100px',
+            }}/>
             <img src={EuFounded} alt=""/>
             <img src={FindHr} alt=""/>
           </div>
