@@ -85,7 +85,7 @@ const KnowledgeGraphScreen = () => {
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
 
-  const [viewingLLVMRelationships, setViewingLLMRetionships] = useState(false);
+  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
 
   useEffect(() => {
     const newNodes = [
@@ -273,7 +273,7 @@ const KnowledgeGraphScreen = () => {
                   height: '50px',
                 }}
                 onClick={() => {
-                  setViewingLLMRetionships(!viewingLLVMRelationships);
+                  setViewingLLMRelationships(!viewingLLVMRelationships);
                 }}
               >
                 {
