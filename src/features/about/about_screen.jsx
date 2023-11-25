@@ -7,6 +7,7 @@ import FindHr from "../../assets/images/findhr.png";
 import logo1 from "../../assets/images/logo1.png";
 import logo2 from "../../assets/images/logo2.png";
 import logo3 from "../../assets/images/logo3.jpg";
+import Logo from "../../assets/images/logo.svg";
 
 const AboutScreen = () => {
   return <div id={`about-screen`}>
@@ -17,17 +18,23 @@ const AboutScreen = () => {
       }}
            className={`d-flex flex-column`}
       >
-        <Toolbar
-          sx={{
-            minHeight: variables.toolbarHeight,
-          }}
-        />
 
         <div className={`d-flex flex-column flex-grow-1 py-5`}
           style={{
             paddingInline: '100px',
           }}
         >
+          <div className={`d-flex align-items-center mb-3`}>
+            <img src={Logo} alt="Migration logo" height={40} width={40} className={'me-4'} />
+
+            <Typography
+              color={variables.primaryPurple}
+              className={'fw-bold flex-grow-1'}
+            >
+              MIGR-AI-TION
+            </Typography>
+          </div>
+
           <Typography
             className={'fw-bold fs-1 mb-4'}
           >
