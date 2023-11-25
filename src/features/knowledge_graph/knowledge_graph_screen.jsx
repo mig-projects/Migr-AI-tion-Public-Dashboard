@@ -3,7 +3,6 @@ import DrawerWrapper from "../drawer_wrapper.jsx";
 import {
   Box, Button, Divider,
   FormControl,
-  InputLabel,
   ListItemText,
   ListSubheader,
   MenuItem,
@@ -13,6 +12,7 @@ import {
 import {useEffect, useState} from "react";
 import BottomInfo from "./components/bottom_info.jsx";
 import {InfoOutlined} from "@mui/icons-material";
+import WhatIsThisMapDialog from "./components/what_is_this_map_dialog.jsx";
 
 const categories = [
   "Company Values & Exploitation","Discrimination in HR","Cross-cultural Communication","Migration Journey","Psychological burden","Bureaucratic Barriers","Lateral Career Development","Promotion","Career Transition"
@@ -207,6 +207,7 @@ const KnowledgeGraphScreen = () => {
   };
 
   const [selectedValue, setSelectedValue] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   return (
     <div id={'knowledge-graph-screen'}>
@@ -269,6 +270,9 @@ const KnowledgeGraphScreen = () => {
                   borderRadius: '8px',
                   height: '50px',
                 }}
+                onClick={() => {
+                  setIsDialogOpen(true);
+                }}
               >
                 {<InfoOutlined sx={{fontSize: '16px'}} className={`me-2`}/>}What it this Map?
               </Button>
@@ -315,6 +319,8 @@ const KnowledgeGraphScreen = () => {
           </div>
         </Box>
       </DrawerWrapper>
+
+      <WhatIsThisMapDialog open={isDialogOpen} setOpen={setIsDialogOpen} />
     </div>
   );
 }
