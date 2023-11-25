@@ -85,6 +85,8 @@ const KnowledgeGraphScreen = () => {
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
 
+  const [viewingLLVMRelationships, setViewingLLMRetionships] = useState(false);
+
   useEffect(() => {
     const newNodes = [
       ...categories.map((category) => {
@@ -261,7 +263,24 @@ const KnowledgeGraphScreen = () => {
               </Select>
             </FormControl>
 
-            <div>
+            <div className={`d-flex gap-2`}>
+              <Button
+                variant="outlined"
+                color="inherit"
+                sx={{
+                  border: '2px solid #D9D9D9',
+                  borderRadius: '8px',
+                  height: '50px',
+                }}
+                onClick={() => {
+                  setViewingLLMRetionships(!viewingLLVMRelationships);
+                }}
+              >
+                {
+                  viewingLLVMRelationships ? 'View LLM-generated relationships' : 'View Research Oriented relationships'
+                }
+              </Button>
+
               <Button
                 variant="outlined"
                 color="inherit"
