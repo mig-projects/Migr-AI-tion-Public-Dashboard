@@ -25,15 +25,21 @@ const KnowledgeGraphScreen = () => {
   const [tagGroups, setTagGroups] = useState({});
   const [relationships, setRelationships] = useState([]);
 
+  const [loading, setLoading] = useState(false);
+
   const fetchAllData = async () => {
+    setLoading(true);
+
     // First fetch categories
+    let categories = [];
     await fetchCategories().then(({data, error}) => {
       if (error) {
         toast.error(error.message);
       } else {
-        setCategories(data.map((category) => category.name));
+        categories = data.map((category) => category.name);
       }
     });
+    setCategories(categories);
 
     // Then fetch tag groups
     const tagGroups = {};
@@ -55,29 +61,34 @@ const KnowledgeGraphScreen = () => {
         data.map((tag) => {
           tagGroups[tag.tag_groups.name].push(tag.name);
         });
-        setTagGroups(tagGroups);
       }
     });
+    setTagGroups(tagGroups);
 
     // Now fetch the relationships
+    let relationships = [];
     await fetchLLMGeneratedLinks().then(({data, error}) => {
       if (error) {
         toast.error(error.message);
       } else {
-        setRelationships(data.map((relationship) => {
+        relationships = data.map((relationship) => {
           return {
             category: relationship.categories.name,
             tag_group: relationship.tag_groups.name,
           };
-        }));
+        });
       }
     });
+    setRelationships(relationships);
+
+    setLoading(false);
+    graphSetup(categories, tagGroups, relationships);
   }
 
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
 
-  const graphSetup = () => {
+  const graphSetup = (categories, tagGroups, relationships) => {
     // First create the nodes
     const newNodes = [
       ...categories.map((category) => {
@@ -157,9 +168,7 @@ const KnowledgeGraphScreen = () => {
   }
 
   useEffect(() => {
-    fetchAllData().then(() => {
-      graphSetup();
-    });
+    fetchAllData().then(() => {});
   }, []);
 
   const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
@@ -298,6 +307,7 @@ const KnowledgeGraphScreen = () => {
 
           <div className={`d-flex flex-column flex-grow-1`}>
             <ReactEcharts
+              showLoading={loading}
               notMerge={true}
               lazyUpdate={true}
               option={options}
