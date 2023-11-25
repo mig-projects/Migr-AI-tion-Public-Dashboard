@@ -4,6 +4,8 @@ import {
   Routes,
   Route, Navigate,
 } from 'react-router-dom';
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 import HomeScreen from "./features/home/home_screen.jsx";
 import AboutScreen from "./features/about/about_screen.jsx";
 import SummarisationScreen from "./features/summarisation/summarisation_screen.jsx";
@@ -25,6 +27,18 @@ function App() {
     <BrowserRouter>
       <Routing />
     </BrowserRouter>
+    <ToastContainer
+      position="bottom-right"
+      autoClose={3000}
+      hideProgressBar
+      newestOnTop
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="colored"
+    />
   </div>;
 }
 
