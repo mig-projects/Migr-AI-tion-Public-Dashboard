@@ -13,81 +13,72 @@ import {useEffect, useState} from "react";
 import BottomInfo from "./components/bottom_info.jsx";
 import {InfoOutlined} from "@mui/icons-material";
 import WhatIsThisMapDialog from "./components/what_is_this_map_dialog.jsx";
-
-const categories = [
-  "Company Values & Exploitation","Discrimination in HR","Cross-cultural Communication","Migration Journey","Psychological burden","Bureaucratic Barriers","Lateral Career Development","Promotion","Career Transition"
-];
-
-const tagGroups = {
-  Gender: {
-    tags: ["Female","Male","Non-binary","Transgender"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden"],
-  },
-  Age: {
-    tags: ["40+ years old","Youthful Look"],
-    links: ["Discrimination in HR", "Psychological burden", "Lateral Career Development", "Promotion", "Career Transition"],
-  },
-  Profession: {
-    tags: ["Tech worker","Entrepreneurs","Linguist","Data people","Data science teachers","Data scientists","Mini-jobbers","Public Speakers","Job searchers","Non-technical but IT","PRODUCT MANAGERS","People Experience or EX People","HR people","Engineer","IT people","Unemployed","STARTUP EMPLOYEES"],
-    links: ["Company Values & Exploitation", "Discrimination in HR", "Cross-cultural Communication", "Lateral Career Development", "Promotion", "Career Transition"]
-  },
-  Disability: {
-    tags: ["Neurodivergent","ADHD","Dyslexia","Autism"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden", "Bureaucratic Barriers"],
-  },
-  Ethnicity: {
-    tags: ["Latin American","Eastern European","North American","South Asian","East Asian","Middle Eastern/West Asian","African"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
-  },
-  Religion: {
-    tags: ["Christian","Muslim","Jewish","Hindu","Buddhist"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
-  },
-  Sexuality: {
-    tags: ["LGBTIQ+","Heterosexual"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
-  },
-  'Family Status': {
-    tags: ["Mother","Father","Parent"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Psychological burden", "Bureaucratic Barriers", "Lateral Career Development", "Promotion", "Career Transition"],
-  },
-  'Professional level': {
-    tags: ["Entry level","Mid level","Senior level","Executive","Freelancer","Business Owner","Consultants","Startup Founder"],
-    links: ["Discrimination in HR", "Lateral Career Development", "Promotion", "Career Transition"],
-  },
-  'Migration & Residence Status': {
-    tags: ["EU National","Non-EU National","Non-German","Permanent resident","Newcomer","Resident","Blue Card","Work Permit","Displaced or Stateless","Migrant"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Migration Journey", "Bureaucratic Barriers"],
-  },
-  'Language proficiency': {
-    tags: ["Multilingual","English-speaker","German Level A1","German Level A2","German Level B1","German Level B2","Non-German speaker","Native English-speaker"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Bureaucratic Barriers"],
-  },
-  Education: {
-    tags: ["Educated in EU","Educated outside of Germany","Educated in Germany"],
-    links: ["Discrimination in HR", "Cross-cultural Communication", "Bureaucratic Barriers", "Lateral Career Development", "Promotion", "Career Transition"],
-  },
-  Name: {
-    tags: ["Non-Western Name","Western name","Western name with Non-English Characters"],
-    links: ["Discrimination in HR", "Cross-cultural Communication"],
-  },
-  Appearance: {
-    tags: ["Person of Color","Caucasian White"],
-    links: ["Discrimination in HR", "Cross-cultural Communication"],
-  },
-};
+import {fetchCategories, fetchLLMGeneratedLinks, fetchTagGroups, fetchTags} from "../supabse/database.js";
+import {toast} from "react-toastify";
 
 const KnowledgeGraphScreen = () => {
   const tagsColor = '#bfe7c4';
   const tagGroupsColor = '#a8d1f7';
   const categoriesColor = '#bcabff';
 
+  const [categories, setCategories] = useState([]);
+  const [tagGroups, setTagGroups] = useState({});
+  const [relationships, setRelationships] = useState([]);
+
+  const fetchAllData = async () => {
+    // First fetch categories
+    await fetchCategories().then(({data, error}) => {
+      if (error) {
+        toast.error(error.message);
+      } else {
+        setCategories(data.map((category) => category.name));
+      }
+    });
+
+    // Then fetch tag groups
+    const tagGroups = {};
+    await fetchTagGroups().then(({data, error}) => {
+      if (error) {
+        toast.error(error.message);
+      } else {
+        data.map((tagGroup) => {
+          tagGroups[tagGroup.name] = [];
+        });
+      }
+    });
+
+    // Then fetch tags
+    await fetchTags().then(({data, error}) => {
+      if (error) {
+        toast.error(error.message);
+      } else {
+        data.map((tag) => {
+          tagGroups[tag.tag_groups.name].push(tag.name);
+        });
+        setTagGroups(tagGroups);
+      }
+    });
+
+    // Now fetch the relationships
+    await fetchLLMGeneratedLinks().then(({data, error}) => {
+      if (error) {
+        toast.error(error.message);
+      } else {
+        setRelationships(data.map((relationship) => {
+          return {
+            category: relationship.categories.name,
+            tag_group: relationship.tag_groups.name,
+          };
+        }));
+      }
+    });
+  }
+
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
 
-  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
-
-  useEffect(() => {
+  const graphSetup = () => {
+    // First create the nodes
     const newNodes = [
       ...categories.map((category) => {
         return {
@@ -123,10 +114,7 @@ const KnowledgeGraphScreen = () => {
     ];
 
     Object.keys(tagGroups).map((tag) => {
-      tagGroups[tag].tags.map((value) => {
-        if (newNodes.find((node) => node.name === value)) {
-          return;
-        }
+      tagGroups[tag].map((value) => {
         newNodes.push({
           name: value,
           category: 2,
@@ -144,22 +132,20 @@ const KnowledgeGraphScreen = () => {
     });
 
     setNodes(newNodes);
-  }, []);
 
-  useEffect(() => {
+
+    // Then create the links
     const newLinks = [];
 
-    Object.keys(tagGroups).map((tagGroup) => {
-      tagGroups[tagGroup].links.map((category) => {
-        newLinks.push({
-          source: category,
-          target: tagGroup,
-        });
+    relationships.map((relationship) => {
+      newLinks.push({
+        source: relationship.category,
+        target: relationship.tag_group,
       });
     });
 
     Object.keys(tagGroups).map((tagGroup) => {
-      tagGroups[tagGroup].tags.map((tag) => {
+      tagGroups[tagGroup].map((tag) => {
         newLinks.push({
           source: tagGroup,
           target: tag,
@@ -168,7 +154,15 @@ const KnowledgeGraphScreen = () => {
     });
 
     setLinks(newLinks);
+  }
+
+  useEffect(() => {
+    fetchAllData().then(() => {
+      graphSetup();
+    });
   }, []);
+
+  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
 
   const options = {
     title: {
@@ -252,7 +246,7 @@ const KnowledgeGraphScreen = () => {
                   Object.keys(tagGroups).map((name) => (
                       [
                         <ListSubheader key={name}>{name}</ListSubheader >,
-                        tagGroups[name].tags.map((tag) => (
+                        tagGroups[name].map((tag) => (
                           <MenuItem key={tag} value={tag}>
                             <ListItemText primary={tag} className={`ps-3`}/>
                           </MenuItem>
