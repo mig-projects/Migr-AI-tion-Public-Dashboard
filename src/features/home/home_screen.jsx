@@ -23,7 +23,7 @@ const HomeScreen = () => {
         flexGrow: 1,
         minHeight: '100vh',
       }}
-        className={`d-flex flex-column`}
+        className={`d-flex flex-column align-items-center`}
       >
         <Toolbar
           sx={{
@@ -31,11 +31,15 @@ const HomeScreen = () => {
           }}
         />
 
-        <div className={`d-flex flex-column align-items-center flex-grow-1 p-4`}>
+        <div className={`d-flex flex-column align-items-center flex-grow-1 p-4`}
+          style={{
+            maxWidth: '1000px',
+          }}
+        >
           <Typography
-            className={'fw-bold fs-1 mb-4'}
+            className={'fw-bold fs-1 mb-4 text-center'}
           >
-            Explore Context Bias
+            Learn more about how societal bias can influence HR systems
           </Typography>
           <Typography paragraph
                       className={'text-center'}
@@ -43,7 +47,7 @@ const HomeScreen = () => {
                         maxWidth: '800px',
                       }}
           >
-            Lorem ipsum dolor sit amet consectetur. Vestibulum lectus volutpat amet non. Egestas morbi nisl massa dignissim. Sed et scelerisque feugiat habitant phasellus. Nulla sit in diam neque ac pretium eu elementum iaculis.
+            Government structures, organizational processes, societal norms and interpersonal biases can influence opportunities for diverse job-seekers in the German tech ecosystem.
           </Typography>
 
           <Link
