@@ -1,7 +1,7 @@
 import ReactEcharts from "echarts-for-react";
 import DrawerWrapper from "../drawer_wrapper.jsx";
 import {
-  Box, Divider,
+  Box, Button, Divider,
   FormControl,
   InputLabel,
   ListItemText,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import {useEffect, useState} from "react";
 import BottomInfo from "./components/bottom_info.jsx";
+import {InfoOutlined} from "@mui/icons-material";
 
 const categories = [
   "Company Values & Exploitation","Discrimination in HR","Cross-cultural Communication","Migration Journey","Psychological burden","Bureaucratic Barriers","Lateral Career Development","Promotion","Career Transition"
@@ -221,6 +222,7 @@ const KnowledgeGraphScreen = () => {
             sx={{
               height: '80px',
             }}
+            className={`d-flex justify-content-between align-items-center`}
           >
             <FormControl>
               <Select
@@ -252,11 +254,25 @@ const KnowledgeGraphScreen = () => {
                             <ListItemText primary={tag} className={`ps-3`}/>
                           </MenuItem>
                         ))
-                        ]
+                      ]
                   ))
                 }
               </Select>
             </FormControl>
+
+            <div>
+              <Button
+                variant="outlined"
+                color="inherit"
+                sx={{
+                  border: '2px solid #D9D9D9',
+                  borderRadius: '8px',
+                  height: '50px',
+                }}
+              >
+                {<InfoOutlined sx={{fontSize: '16px'}} className={`me-2`}/>}What it this Map?
+              </Button>
+            </div>
           </Toolbar>
 
           <Divider
