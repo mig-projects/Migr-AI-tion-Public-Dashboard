@@ -219,25 +219,24 @@ const KnowledgeGraphScreen = () => {
         >
           <Toolbar
             sx={{
-              height: '70px',
+              height: '80px',
             }}
           >
             <FormControl>
-              <InputLabel>Tag</InputLabel>
               <Select
-                label="Tag"
                 sx={{
                   '.MuiOutlinedInput-notchedOutline': { border: 0 },
                   minWidth: '200px',
+                  height: '50px',
+                  backgroundColor: '#eeeeee',
                 }}
                 value={selectedValue}
                 onChange={(event) => {
-                  console.log(event.target.value);
                   setSelectedValue(event.target.value);
                 }}
                 displayEmpty
                 inputProps={{ outline: "none" }}
-                renderValue={(selected) => selected}
+                renderValue={(selected) => selected || 'Tags'}
                 MenuProps={{
                   PaperProps: {
                     elevation: 0,
@@ -269,7 +268,7 @@ const KnowledgeGraphScreen = () => {
               notMerge={true}
               lazyUpdate={true}
               option={options}
-              className={'flex-grow-1 h-100 w-100'}
+              className={'flex-grow-1'}
             />
           </div>
 
