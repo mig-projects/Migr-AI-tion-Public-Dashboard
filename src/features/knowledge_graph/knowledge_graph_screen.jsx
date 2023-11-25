@@ -15,6 +15,7 @@ import {InfoOutlined} from "@mui/icons-material";
 import WhatIsThisMapDialog from "./components/what_is_this_map_dialog.jsx";
 import {fetchCategories, fetchLLMGeneratedLinks, fetchTagGroups, fetchTags} from "../supabse/database.js";
 import {toast} from "react-toastify";
+import PropTypes from "prop-types";
 
 const KnowledgeGraphScreen = () => {
   const tagsColor = '#bfe7c4';
@@ -23,6 +24,7 @@ const KnowledgeGraphScreen = () => {
 
   const [categories, setCategories] = useState([]);
   const [tagGroups, setTagGroups] = useState({});
+  const [tags, setTags] = useState([]);
   const [relationships, setRelationships] = useState([]);
 
   const [loading, setLoading] = useState(false);
@@ -58,6 +60,12 @@ const KnowledgeGraphScreen = () => {
       if (error) {
         toast.error(error.message);
       } else {
+        setTags(data.map((tag) => {
+          return {
+            name: tag.name,
+            tag_group: tag.tag_groups.name,
+          };
+        }));
         data.map((tag) => {
           tagGroups[tag.tag_groups.name].push(tag.name);
         });
@@ -87,9 +95,7 @@ const KnowledgeGraphScreen = () => {
 
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
-
   const [filteredNodes, setFilteredNodes] = useState([]);
-  const [filteredLinks, setFilteredLinks] = useState([]);
 
   const graphSetup = (categories, tagGroups, relationships) => {
     // First create the nodes
@@ -169,33 +175,55 @@ const KnowledgeGraphScreen = () => {
 
     setLinks(newLinks);
 
-    filterGraph('');
+    filterGraph({
+      none: true,
+      justNodes: newNodes,
+    });
   }
 
-  const filterGraph = (value) => {
+  const filterGraph = ({
+    tag,
+    tagGroup,
+    category,
+    justNodes,
+  }) => {
     const newNodes = [];
     const newLinks = [];
 
-    if (value === '') {
-      setFilteredNodes(nodes);
-      setFilteredLinks(links);
+    if (justNodes) {
+      setFilteredNodes(justNodes);
       return;
     }
 
-    nodes.map((node) => {
-      if (node.name === value) {
-        newNodes.push(node);
-      }
-    });
+    if (tag) {
+      newNodes.push(...nodes.filter((node) => {
+        return node.name === tag;
+      }));
 
-    links.map((link) => {
-      if (link.source === value || link.target === value) {
-        newLinks.push(link);
-      }
+      const tag_group_name = tags.find((e) => e.name === tag).tag_group;
+      newLinks.push(...links.filter((link) => {
+        return link.target === tag_group_name;
+      }));
+
+      const nodesSet = new Set();
+      newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
+    }
+
+    const nodesSet = new Set();
+    newLinks.map((link) => {
+      nodesSet.add(link.source);
+      nodesSet.add(link.target);
     });
+    newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
 
     setFilteredNodes(newNodes);
-    setFilteredLinks(newLinks);
+  }
+
+  filterGraph.propTypes = {
+    tag: PropTypes.string,
+    tagGroup: PropTypes.string,
+    category: PropTypes.string,
+    none: PropTypes.bool,
   }
 
   useEffect(() => {
@@ -234,6 +262,9 @@ const KnowledgeGraphScreen = () => {
                 value={selectedValue}
                 onChange={(event) => {
                   setSelectedValue(event.target.value);
+                  filterGraph({
+                    tag: event.target.value,
+                  });
                 }}
                 displayEmpty
                 inputProps={{ outline: "none" }}
@@ -313,7 +344,7 @@ const KnowledgeGraphScreen = () => {
                     type: "graph",
                     layout: "force",
                     data: filteredNodes,
-                    links: filteredLinks,
+                    links: links,
                     symbol: 'circle',
                     roam: true,
                     label: {
