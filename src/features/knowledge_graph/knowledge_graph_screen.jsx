@@ -88,6 +88,9 @@ const KnowledgeGraphScreen = () => {
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
 
+  const [filteredNodes, setFilteredNodes] = useState([]);
+  const [filteredLinks, setFilteredLinks] = useState([]);
+
   const graphSetup = (categories, tagGroups, relationships) => {
     // First create the nodes
     const newNodes = [
@@ -165,54 +168,44 @@ const KnowledgeGraphScreen = () => {
     });
 
     setLinks(newLinks);
+
+    filterGraph('');
+  }
+
+  const filterGraph = (value) => {
+    const newNodes = [];
+    const newLinks = [];
+
+    if (value === '') {
+      setFilteredNodes(nodes);
+      setFilteredLinks(links);
+      return;
+    }
+
+    nodes.map((node) => {
+      if (node.name === value) {
+        newNodes.push(node);
+      }
+    });
+
+    links.map((link) => {
+      if (link.source === value || link.target === value) {
+        newLinks.push(link);
+      }
+    });
+
+    setFilteredNodes(newNodes);
+    setFilteredLinks(newLinks);
   }
 
   useEffect(() => {
     fetchAllData().then(() => {});
   }, []);
 
-  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
-
-  const options = {
-    title: {
-      display: false,
-    },
-    tooltip: {},
-    series: [
-      {
-        type: "graph",
-        layout: "force",
-        data: nodes,
-        links: links,
-        symbol: 'circle',
-        roam: true,
-        label: {
-          show: true,
-          position: 'right',
-          formatter: '{b}'
-        },
-        emphasis: {
-          focus: 'adjacency',
-          scale: true,
-        },
-        lineStyle: {
-          curveness: 0.02,
-          width: 0.7,
-        },
-        edgeLabel: {
-          formatter: '{c}',
-        },
-        force: {
-          edgeLength: 30,
-          repulsion: 1000,
-          friction: 0.2,
-        },
-      },
-    ],
-  };
-
   const [selectedValue, setSelectedValue] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
 
   return (
     <div id={'knowledge-graph-screen'}>
@@ -310,7 +303,43 @@ const KnowledgeGraphScreen = () => {
               showLoading={loading}
               notMerge={true}
               lazyUpdate={true}
-              option={options}
+              option={{
+                title: {
+                  display: false,
+                },
+                tooltip: {},
+                series: [
+                  {
+                    type: "graph",
+                    layout: "force",
+                    data: filteredNodes,
+                    links: filteredLinks,
+                    symbol: 'circle',
+                    roam: true,
+                    label: {
+                      show: true,
+                      position: 'right',
+                      formatter: '{b}'
+                    },
+                    emphasis: {
+                      focus: 'adjacency',
+                      scale: true,
+                    },
+                    lineStyle: {
+                      curveness: 0.02,
+                      width: 0.7,
+                    },
+                    edgeLabel: {
+                      formatter: '{c}',
+                    },
+                    force: {
+                      edgeLength: 30,
+                      repulsion: 1000,
+                      friction: 0.2,
+                    },
+                  },
+                ],
+              }}
               className={'flex-grow-1'}
             />
           </div>
