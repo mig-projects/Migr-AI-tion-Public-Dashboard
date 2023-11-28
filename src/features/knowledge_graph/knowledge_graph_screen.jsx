@@ -176,7 +176,6 @@ const KnowledgeGraphScreen = () => {
     setLinks(newLinks);
 
     filterGraph({
-      none: true,
       justNodes: newNodes,
     });
   }
@@ -329,22 +328,24 @@ const KnowledgeGraphScreen = () => {
             </FormControl>
 
             <div className={`d-flex gap-2`}>
-              <Button
-                variant="outlined"
-                color="inherit"
-                sx={{
-                  border: '2px solid #D9D9D9',
-                  borderRadius: '8px',
-                  height: '50px',
-                }}
-                onClick={() => {
-                  setViewingLLMRelationships(!viewingLLVMRelationships);
-                }}
-              >
-                {
-                  viewingLLVMRelationships ? 'View LLM-generated relationships' : 'View Research Oriented relationships'
-                }
-              </Button>
+              {
+                nodes.length !== filteredNodes.length && <Button
+                  variant="outlined"
+                  color="inherit"
+                  sx={{
+                    border: '2px solid #D9D9D9',
+                    borderRadius: '8px',
+                    height: '50px',
+                  }}
+                  onClick={() => {
+                    filterGraph({
+                      justNodes: nodes,
+                    })
+                  }}
+                >
+                  Back to full view
+                </Button>
+              }
 
               <Button
                 variant="outlined"
@@ -454,6 +455,25 @@ const KnowledgeGraphScreen = () => {
               text={'Tags'}
               tooltipText={'These are the tags that are used in the stories'}
             />
+
+            <div className={`flex-grow-1`} />
+
+            <Button
+              variant="outlined"
+              color="inherit"
+              sx={{
+                border: '2px solid #D9D9D9',
+                borderRadius: '8px',
+                height: '50px',
+              }}
+              onClick={() => {
+                setViewingLLMRelationships(!viewingLLVMRelationships);
+              }}
+            >
+              {
+                viewingLLVMRelationships ? 'View LLM-generated relationships' : 'View Research Oriented relationships'
+              }
+            </Button>
           </div>
         </Box>
       </DrawerWrapper>
