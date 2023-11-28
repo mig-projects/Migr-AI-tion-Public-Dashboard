@@ -1,10 +1,60 @@
-import {fetchCategories, fetchLLMGeneratedLinks, fetchTagGroups, fetchTags} from "../../supabse/database.js";
+import {
+  fetchCategories,
+  fetchExperienceHeadlinesFromTag,
+  fetchLLMGeneratedLinks,
+  fetchTagGroups,
+  fetchTags
+} from "../../supabse/database.js";
 import {toast} from "react-toastify";
 import PropTypes from "prop-types";
 
 const tagsColor = '#bfe7c4';
 const tagGroupsColor = '#a8d1f7';
 const categoriesColor = '#bcabff';
+const headlineColor = '#CECECE';
+
+const fetchTagRelatedExperienceHeadlines = async (tag) => {
+  let headlines = [];
+  await fetchExperienceHeadlinesFromTag(tag).then(({data, error}) => {
+    if (error) {
+      toast.error(error.message);
+    } else {
+      headlines = data.map((experience) => experience.headline);
+    }
+  });
+  return headlines;
+}
+
+const getHeadlineNodesAndLinks = async (tag) => {
+  const headlines = await fetchTagRelatedExperienceHeadlines(tag);
+  const nodes = headlines.map((headline) => {
+    return {
+      name: headline,
+      category: 3,
+      symbolSize: 10,
+      label: {
+        fontSize: 10,
+        color: '#CECECE',
+      },
+      itemStyle: {
+        color: headlineColor,
+      },
+      tooltip: {
+        extraCssText: 'width: 400px; text-overlow: wrap; white-space: normal; word-break: break-word;',
+      },
+    };
+  });
+  const links = headlines.map((headline) => {
+    return {
+      source: tag,
+      target: headline,
+    };
+  });
+  return {
+    nodes,
+    links,
+  };
+}
 
 const fetchGraphData = async () => {
   // First fetch categories
@@ -149,7 +199,7 @@ const graphSetup = (categories, tagGroups, relationships) => {
   };
 }
 
-const filterGraph = (nodes, links, tags, {
+const filterGraph = async (nodes, links, tags, {
   tag,
   tagGroup,
   category,
@@ -157,6 +207,8 @@ const filterGraph = (nodes, links, tags, {
   const newNodes = [];
   const newLinks = [];
 
+  const headlineNodes = [];
+  const headlineLinks = [];
   if (tag) {
     // Add the tag
     newNodes.push(...nodes.filter((node) => {
@@ -176,6 +228,11 @@ const filterGraph = (nodes, links, tags, {
       nodesSet.add(link.target);
     });
     newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
+
+    await getHeadlineNodesAndLinks(tag).then(({nodes, links}) => {
+      headlineNodes.push(...nodes);
+      headlineLinks.push(...links);
+    });
   } else if (tagGroup) {
     // Add all links that have the tag_group as a source or target
     newLinks.push(...links.filter((link) => {
@@ -216,7 +273,11 @@ const filterGraph = (nodes, links, tags, {
     newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
   }
 
-  return newNodes;
+  return {
+    nodes: newNodes,
+    headlineNodes,
+    headlineLinks,
+  }
 }
 
 filterGraph.propTypes = {
@@ -229,7 +290,10 @@ export {
   tagsColor,
   tagGroupsColor,
   categoriesColor,
+  headlineColor,
   fetchGraphData,
   graphSetup,
   filterGraph,
+  fetchTagRelatedExperienceHeadlines,
+  getHeadlineNodesAndLinks,
 }

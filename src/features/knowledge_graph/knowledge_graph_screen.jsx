@@ -33,6 +33,9 @@ const KnowledgeGraphScreen = () => {
   const [links, setLinks] = useState([]);
   const [filteredNodes, setFilteredNodes] = useState([]);
 
+  const [headlineNodes, setHeadlineNodes] = useState([]);
+  const [headlineLinks, setHeadlineLinks] = useState([]);
+
   useEffect(() => {
     setLoading(true);
     fetchGraphData().then(({
@@ -94,11 +97,16 @@ const KnowledgeGraphScreen = () => {
                   backgroundColor: '#eeeeee',
                 }}
                 value={selectedValue}
-                onChange={(event) => {
+                onChange={async (event) => {
+                  setLoading(true);
+
                   setSelectedValue(event.target.value);
-                  setFilteredNodes(filterGraph(nodes, links, tags, {
+                  const result = await filterGraph(nodes, links, tags, {
                     tag: event.target.value,
-                  }));
+                  });
+                  setFilteredNodes(result.nodes);
+
+                  setLoading(false);
                 }}
                 displayEmpty
                 inputProps={{ outline: "none" }}
@@ -136,6 +144,8 @@ const KnowledgeGraphScreen = () => {
                   }}
                   onClick={() => {
                     setFilteredNodes(nodes);
+                    setHeadlineNodes([]);
+                    setHeadlineLinks([]);
                     setSelectedValue('');
                   }}
                 >
@@ -170,33 +180,44 @@ const KnowledgeGraphScreen = () => {
               notMerge={true}
               lazyUpdate={true}
               onEvents={{
-                click: (params) => {
+                click: async (params) => {
+                  let result;
                   if (params.data.category === 0) {
-                    setFilteredNodes(filterGraph(nodes, links, tags, {
+                    result = await filterGraph(nodes, links, tags, {
                       category: params.data.name,
-                    }));
+                    });
                   } else if (params.data.category === 1) {
-                    setFilteredNodes(filterGraph(nodes, links, tags, {
+                    result = await filterGraph(nodes, links, tags, {
                       tagGroup: params.data.name,
-                    }));
+                    });
                   } else if (params.data.category === 2) {
-                    setFilteredNodes(filterGraph(nodes, links, tags, {
+                    setLoading(true);
+                    result = await filterGraph(nodes, links, tags, {
                       tag: params.data.name,
-                    }));
+                    });
                   }
+
+                  setFilteredNodes(result.nodes);
+                  setHeadlineNodes(result.headlineNodes);
+                  setHeadlineLinks(result.headlineLinks);
+
+                  setLoading(false);
                 }
               }}
               option={{
                 title: {
                   display: false,
                 },
-                tooltip: {},
+                tooltip: {
+                  show: true,
+                  position: 'bottom',
+                },
                 series: [
                   {
                     type: "graph",
                     layout: "force",
-                    data: filteredNodes,
-                    links: links,
+                    data: [...filteredNodes, ...headlineNodes],
+                    links: [...links, ...headlineLinks],
                     symbol: 'circle',
                     roam: true,
                     label: {

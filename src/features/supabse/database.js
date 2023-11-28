@@ -24,9 +24,18 @@ const fetchLLMGeneratedLinks = async () => {
   return { data, error };
 }
 
+// Fetch experiences based on a tag name
+const fetchExperienceHeadlinesFromTag = async (tag) => {
+  const { data, error } = await supabase.rpc('get_experience_headlines_from_tag', {
+    tag_name: tag,
+  }).select();
+  return { data, error };
+}
+
 export {
   fetchCategories,
   fetchTagGroups,
   fetchTags,
   fetchLLMGeneratedLinks,
+  fetchExperienceHeadlinesFromTag,
 };
