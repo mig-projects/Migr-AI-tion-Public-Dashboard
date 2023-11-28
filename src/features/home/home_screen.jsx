@@ -92,6 +92,7 @@ const HomeScreen = () => {
                 endAdornment: <InputAdornment position="end">
                   <IconButton
                     edge="end"
+                    type={'submit'}
                   >
                     <Search />
                   </IconButton>
