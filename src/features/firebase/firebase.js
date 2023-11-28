@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import config from "./config.json";
 import { getApp } from "firebase/app";
-import { getFunctions, httpsCallable, connectFunctionsEmulator  } from "firebase/functions";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const firebaseConfig = {
   apiKey: config.apiKey,

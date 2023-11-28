@@ -3,7 +3,7 @@ import {
   Box,
   Card,
   CardContent,
-  Chip,
+  Chip, CircularProgress,
   IconButton,
   ListItem,
   ListItemButton,
@@ -15,8 +15,51 @@ import variables from "../../variables.module.scss";
 import {ArrowForward, InfoOutlined} from "@mui/icons-material";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/scss';
+import {useLocation, useNavigate} from "react-router-dom";
+import {useEffect, useState} from "react";
+import {searchExperiences} from "../supabse/database.js";
+import {toast} from "react-toastify";
+import {getSummary} from "../firebase/firebase.js";
 
 const SummarisationScreen = () => {
+  const location = useLocation();
+  const {searchValue} = location.state || '';
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
+  const [loadingSummary, setLoadingSummary] = useState(false);
+  const [experiences, setExperiences] = useState([]);
+  const [summary, setSummary] = useState('');
+
+  useEffect(() => {
+    if (searchValue === null || searchValue === undefined) {
+      navigate('/home');
+      return;
+    }
+
+    setLoading(true);
+    searchExperiences(searchValue).then( async ({data, error}) => {
+      if (error) {
+        toast.error(error.message);
+      } else {
+        setExperiences(data);
+      }
+      setLoading(false);
+
+      if (data.length === 0) {
+        return;
+      }
+
+      setLoadingSummary(true);
+      await getSummary({
+        experience_ids: data.map((experience) => experience.id)
+      }).then((summary) => {
+        setSummary(summary.data ?? '');
+      });
+      setLoadingSummary(false);
+    });
+  }, [navigate, searchValue]);
+
   return <div id={'summarisation-screen'}>
     <DrawerWrapper>
       <Box component="main" sx={{
@@ -32,108 +75,133 @@ const SummarisationScreen = () => {
           }}
         >
           <Typography>
-            Search results for ‘Woman’
+            Search results for ‘{searchValue}’
           </Typography>
         </Toolbar>
 
-        <div className={`d-flex flex-column flex-grow-1 py-3`}
-        >
-          <Typography className={'px-4 mb-3'}>
-            Sources:
-          </Typography>
-
-          <Swiper
-            slidesPerView={'auto'}
-            spaceBetween={20}
-            className={'w-100 px-4'}
+        {
+          loading ? <div className={`d-flex justify-content-center align-items-center flex-grow-1`}
           >
-            {
-              Array(10).fill(0).map((_, i) => {
-                return <SwiperSlide
-                  key={i}
-                  className={`swiper-slide`}
-                  style={{
-                    width: '350px',
-                  }}
-                >
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      background: 'linear-gradient(to bottom right, rgba(116, 56, 226, 0.05), rgba(116, 56, 226, 0.13))',
-                      border: '1.5px solid rgba(116, 56, 226, 0.1)',
+            <CircularProgress />
+          </div> :
+            experiences.length === 0 ? <div className={`d-flex justify-content-center align-items-center flex-grow-1`}
+            >
+              <Typography>
+                No search results found! Please try another Query
+              </Typography>
+            </div> :
+          <div className={`d-flex flex-column flex-grow-1 py-3`}>
+            <Typography className={'px-4 mb-3'}>
+              Sources:
+            </Typography>
+
+            <Swiper
+              slidesPerView={2}
+              spaceBetween={20}
+              className={'w-100 px-4'}
+            >
+              {
+                experiences.map((experience) => {
+                  return <SwiperSlide
+                    key={experience.id}
+                    className={`swiper-slide`}
+                    style={{
+
                     }}
                   >
-                    <CardContent
-                      className={`d-flex flex-column`}
+                    <Card
+                      variant="outlined"
+                      sx={{
+                        background: 'linear-gradient(to bottom right, rgba(116, 56, 226, 0.05), rgba(116, 56, 226, 0.13))',
+                        border: '1.5px solid rgba(116, 56, 226, 0.1)',
+                      }}
                     >
-                      <Typography className={`fw-bold mb-2`}
-                        sx={{
-                          fontSize: '14px',
-                        }}
+                      <CardContent
+                        className={`d-flex flex-column`}
                       >
-                        “Fired twice within 6 months of moving to Germany”
-                      </Typography>
+                        <Typography className={`fw-bold mb-2`}
+                                    sx={{
+                                      fontSize: '14px',
+                                    }}
+                        >
+                          “{experience.headline}”
+                        </Typography>
 
-                      <Typography className={``}
-                                  sx={{
-                                    fontSize: '14px',
-                                  }}
-                      >
-                        Category
-                      </Typography>
+                        <div
+                          className={`d-flex gap-1 mt-3 flex-wrap`}
+                        >
+                          {
+                            experience.categories_list.map((category, i) => {
+                              return <Chip
+                                key={i}
+                                label={category}
+                              />
+                            })
+                          }
+                        </div>
 
-                      <div
-                       className={`d-flex gap-1 my-3`}
-                      >
-                        {
-                          Array(3).fill(0).map((_, i) => {
-                            return <Chip
-                              key={i}
-                              label={'Women'}
-                            />
-                          })
-                        }
-                      </div>
+                        <div
+                          className={`d-flex gap-1 mt-1 flex-wrap`}
+                        >
+                          {
+                            experience.tags_list.map((tag, i) => {
+                              return <Chip
+                                key={i}
+                                label={tag}
+                              />
+                            })
+                          }
+                        </div>
 
-                      <Typography className={``}
-                                  sx={{
-                                    fontSize: '13px',
-                                  }}
-                      >
-                        Tellus quis condimentum egestas id habitant adipiscing vel massa placerat. Quis tincidunt faucibus diam nunc eu in. Sed nam eget dictum porttitor ullamcorper ultricies.
-                      </Typography>
+                        <Typography className={`mt-3`}
+                                    sx={{
+                                      fontSize: '13px',
+                                      maxLines: 3,
+                                    }}
+                        >
+                          {experience.text}
+                        </Typography>
 
-                    </CardContent>
-                  </Card>
-                </SwiperSlide>
-              })
-            }
-          </Swiper>
+                      </CardContent>
+                    </Card>
+                  </SwiperSlide>
+                })
+              }
+            </Swiper>
 
-          <div className={`d-flex align-items-center justify-content-between mt-4 mb-3 mx-4 mb-3`}>
-            <Typography className={`me-2`}>
-              Summary
-            </Typography>
+            <div className={`d-flex align-items-center justify-content-between mb-3 mx-4 mb-3`}>
+              <Typography className={`me-2`}>
+                Summary
+              </Typography>
 
-            <Tooltip title="This LLM-generated summary is a demo of an interesting idea. We'll let you know when its ready to be taken seriously. :)" arrow>
-              <IconButton>
-                <InfoOutlined style={{
-                  fontSize: '18px',
-                }} />
-              </IconButton>
-            </Tooltip>
+              <Tooltip title="This LLM-generated summary is a demo of an interesting idea. We'll let you know when its ready to be taken seriously. :)" arrow>
+                <IconButton>
+                  <InfoOutlined style={{
+                    fontSize: '18px',
+                  }} />
+                </IconButton>
+              </Tooltip>
+            </div>
+
+            <Card
+              className={`mx-4 p-4 mb-4`}
+              variant="outlined"
+            >
+              {loadingSummary ? <div className={`d-flex justify-content-center align-items-center`}
+                  style={{
+                    minHeight: '200px',
+                  }}
+                >
+              <CircularProgress />
+            </div> :
+              <Typography paragraph>
+                {summary}
+              </Typography>}
+            </Card>
+
           </div>
+        }
 
-          <Card
-            className={`mx-4 p-4 mb-4`}
-            variant="outlined"
-          >
-            <Typography paragraph>
-              Lorem ipsum dolor sit amet consectetur. Tellus maecenas in pharetra pharetra volutpat id. Egestas elit risus urna feugiat eleifend mattis sed. Tellus quis condimentum egestas id habitant adipiscing vel massa placerat. Quis tincidunt faucibus diam nunc eu in. Sed nam eget dictum porttitor ullamcorper ultricies volutpat. Mi eleifend aliquam varius id tellus diam nulla odio adipiscing. Diam vitae a neque proin mattis viverra. Integer nec eget in turpis velit porta vestibulum. Dolor sit id sit quam egestas ut. Lorem ipsum dolor sit amet consectetur. Tellus maecenas in pharetra pharetra volutpat id. Egestas elit risus urna feugiat eleifend mattis sed. Tellus quis condimentum egestas id habitant adipiscing vel massa placerat. Quis tincidunt faucibus diam nunc eu in. Sed nam eget dictum porttitor ullamcorper ultricies volutpat. Mi eleifend aliquam varius id tellus diam nulla odio adipiscing. Diam vitae a neque proin mattis viverra. Integer nec eget in turpis velit porta vestibulum. Dolor sit id sit quam egestas ut.
-            </Typography>
-          </Card>
-
-        </div>
 
         <ListItem disablePadding
                   sx={{
