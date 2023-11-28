@@ -59,7 +59,7 @@ const SummarisationScreen = () => {
       await getSummary({
         experience_ids: data.map((experience) => experience.id)
       }).then((summary) => {
-        setSummary(summary.data ?? '');
+        setSummary(summary.data?.replace('Summary: ', '') ?? '');
       });
       setLoadingSummary(false);
     });
