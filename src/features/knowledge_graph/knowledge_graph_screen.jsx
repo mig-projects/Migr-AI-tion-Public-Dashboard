@@ -16,12 +16,16 @@ import WhatIsThisMapDialog from "./components/what_is_this_map_dialog.jsx";
 import {
   categoriesColor,
   fetchGraphData,
-  filterGraph,
+  filterGraph, getHeadlineNodesAndLinksFromSearchedExperiences,
   graphSetup,
   tagGroupsColor, tagsColor
 } from "./components/knowledge_graph_components.js";
+import {useLocation} from "react-router-dom";
 
 const KnowledgeGraphScreen = () => {
+  const location = useLocation();
+  const {searchedExperiences} = location.state || [];
+  
   const [categories, setCategories] = useState([]);
   const [tagGroups, setTagGroups] = useState({});
   const [tags, setTags] = useState([]);
@@ -61,11 +65,22 @@ const KnowledgeGraphScreen = () => {
       setNodes(nodes);
       setLinks(links);
 
-      setFilteredNodes(nodes);
+      if (searchedExperiences && searchedExperiences.length > 0) {
+        const {
+          filteredNodes,
+          newNodes,
+          newLinks,
+        } = getHeadlineNodesAndLinksFromSearchedExperiences(nodes, tags, searchedExperiences);
+        setHeadlineNodes(newNodes);
+        setHeadlineLinks(newLinks);
+        setFilteredNodes(filteredNodes);
+      } else {
+        setFilteredNodes(nodes);
+      }
 
       setLoading(false);
     });
-  }, []);
+  }, [searchedExperiences]);
 
   const [selectedValue, setSelectedValue] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);

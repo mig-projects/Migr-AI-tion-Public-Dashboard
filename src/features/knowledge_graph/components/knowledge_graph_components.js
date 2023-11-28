@@ -25,30 +25,14 @@ const fetchTagRelatedExperienceHeadlines = async (tag) => {
 }
 
 const getHeadlineNodesAndLinks = async (tag) => {
-  const headlines = await fetchTagRelatedExperienceHeadlines(tag);
-  const nodes = headlines.map((headline) => {
-    return {
-      name: `${headline.id}`,
-      category: 3,
-      value: headline.headline,
-      symbolSize: 10,
-      label: {
-        formatter: `{c}`,
-        fontSize: 11,
-      },
-      itemStyle: {
-        color: headlineColor,
-      },
-      tooltip: {
-        formatter: `{c}`,
-        extraCssText: 'width: 400px; text-overlow: wrap; white-space: normal; word-break: break-word;',
-      },
-    };
+  const experiences = await fetchTagRelatedExperienceHeadlines(tag);
+  const nodes = experiences.map((experience) => {
+    return createHeadlineNode(experience);
   });
-  const links = headlines.map((headline) => {
+  const links = experiences.map((experience) => {
     return {
       source: tag,
-      target: `${headline.id}`,
+      target: `${experience.id}`,
     };
   });
   return {
@@ -56,6 +40,67 @@ const getHeadlineNodesAndLinks = async (tag) => {
     links,
   };
 }
+
+const getHeadlineNodesAndLinksFromSearchedExperiences = (nodes, tags, experiences) => {
+  const newNodes = experiences.map((experience) => {
+    return createHeadlineNode(experience);
+  });
+
+  const newLinks = []
+  experiences.map((experience) => {
+    experience.tags_list.map((tag) => {
+      newLinks.push({
+        source: tag,
+        target: `${experience.id}`,
+      });
+    });
+
+    experience.categories_list.map((category) => {
+      newLinks.push({
+        source: category,
+        target: `${experience.id}`,
+      });
+    });
+  });
+
+  const nodesToShow = new Set();
+  newLinks.map((link) => {
+    nodesToShow.add(link.source);
+  });
+  nodesToShow.forEach((node) => {
+    try {
+      nodesToShow.add(tags.find((e) => e.name === node).tag_group);
+    } catch (e) { /* empty */ }
+  });
+
+  const filteredNodes = nodes.filter((node) => {
+    return nodesToShow.has(node.name);
+  });
+
+  return {
+    filteredNodes,
+    newNodes,
+    newLinks,
+  };
+}
+
+const createHeadlineNode = (experience) => ({
+  name: `${experience.id}`,
+  category: 3,
+  value: experience.headline,
+  symbolSize: 10,
+  label: {
+    formatter: `{c}`,
+    fontSize: 11,
+  },
+  itemStyle: {
+    color: headlineColor,
+  },
+  tooltip: {
+    formatter: `{c}`,
+    extraCssText: 'width: 400px; text-overlow: wrap; white-space: normal; word-break: break-word;',
+  },
+});
 
 const fetchGraphData = async () => {
   // First fetch categories
@@ -292,9 +337,11 @@ export {
   tagGroupsColor,
   categoriesColor,
   headlineColor,
+  createHeadlineNode,
   fetchGraphData,
   graphSetup,
   filterGraph,
   fetchTagRelatedExperienceHeadlines,
   getHeadlineNodesAndLinks,
+  getHeadlineNodesAndLinksFromSearchedExperiences,
 }

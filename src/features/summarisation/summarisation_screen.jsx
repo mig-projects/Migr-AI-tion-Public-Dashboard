@@ -214,6 +214,13 @@ const SummarisationScreen = () => {
               height: '70px',
             }}
             className={`d-flex justify-content-center text-white`}
+            onClick={() => {
+              navigate('/knowledge-graph', {
+                state: {
+                  searchedExperiences: experiences,
+                },
+              });
+            }}
           >
             <Typography>
               View Knowledge Graph {<ArrowForward sx={{fontSize: '15px', marginBottom: '2px'}} />}
