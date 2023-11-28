@@ -16,7 +16,7 @@ const Routing = () => {
   return <Routes>
     <Route path="/home" element={<HomeScreen />} />
     <Route path="/about" element={ <AboutScreen /> } />
-    <Route path="/summarisation" element={ <SummarisationScreen /> } />
+    <Route path="/summarisation/:searchText" element={ <SummarisationScreen /> } />
     <Route path="/knowledge-graph" element={ <KnowledgeGraphScreen /> } />
     <Route path="*" element={ <Navigate to={'/home'} /> } />
   </Routes>;

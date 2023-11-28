@@ -1,4 +1,5 @@
 import {
+  Box,
   Drawer, IconButton, InputAdornment, Link,
   List,
   ListItem,
@@ -12,11 +13,14 @@ import {useLocation, useNavigate} from "react-router-dom";
 import DiscordIcon from "../../assets/images/discord.svg";
 import Logo from "../../assets/images/logo.svg";
 import variables from "../../variables.module.scss";
+import {useState} from "react";
 
 const LeftDrawer = () => {
   const width = 300;
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [searchValue, setSearchValue] = useState('');
 
   const routes = {
     'Home': '/home',
@@ -55,25 +59,37 @@ const LeftDrawer = () => {
         </Typography>
       </Link>
     </Toolbar>
-    <TextField
-      sx={{
-        marginInline: '15px',
-        marginBottom: '15px',
+    <Box
+      component="form"
+      onSubmit={() => {
+        navigate('/summarisation/' + searchValue);
       }}
-      label="Search"
-      InputProps={{
-        style: {
-          borderRadius: '12px',
-        },
-        endAdornment: <InputAdornment position="end">
-          <IconButton
-            edge="end"
-          >
-            <Search />
-          </IconButton>
-        </InputAdornment>,
-      }}
-    />
+    >
+      <TextField
+        sx={{
+          marginInline: '15px',
+          marginBottom: '15px',
+        }}
+        required
+        value={searchValue}
+        onChange={(event) => {
+          setSearchValue(event.target.value);
+        }}
+        label="Search"
+        InputProps={{
+          style: {
+            borderRadius: '12px',
+          },
+          endAdornment: <InputAdornment position="end">
+            <IconButton
+              edge="end"
+            >
+              <Search />
+            </IconButton>
+          </InputAdornment>,
+        }}
+      />
+    </Box>
     <List className={`flex-grow-1`}>
       {Object.keys(routes).map((routeName) => (
         <ListItem key={routeName} disablePadding>

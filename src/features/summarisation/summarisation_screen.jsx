@@ -15,15 +15,14 @@ import variables from "../../variables.module.scss";
 import {ArrowForward, InfoOutlined} from "@mui/icons-material";
 import {Swiper, SwiperSlide} from "swiper/react";
 import 'swiper/scss';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {searchExperiences} from "../supabse/database.js";
 import {toast} from "react-toastify";
 import {getSummary} from "../firebase/firebase.js";
 
 const SummarisationScreen = () => {
-  const location = useLocation();
-  const {searchValue} = location.state || '';
+  const {searchText} = useParams();
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -32,18 +31,14 @@ const SummarisationScreen = () => {
   const [summary, setSummary] = useState('');
 
   useEffect(() => {
-    if (searchValue === null || searchValue === undefined) {
-      navigate('/home');
-    }
-  }, [searchValue, navigate]);
+    console.log(searchText);
 
-  useEffect(() => {
-    if (searchValue === null || searchValue === undefined) {
+    if (searchText === null || searchText === undefined) {
       return;
     }
 
     setLoading(true);
-    searchExperiences(searchValue).then( async ({data, error}) => {
+    searchExperiences(searchText).then( async ({data, error}) => {
       if (error) {
         toast.error(error.message);
       } else {
@@ -63,7 +58,7 @@ const SummarisationScreen = () => {
       });
       setLoadingSummary(false);
     });
-  }, [searchValue]);
+  }, [searchText]);
 
   return <div id={'summarisation-screen'}>
     <DrawerWrapper>
@@ -80,7 +75,7 @@ const SummarisationScreen = () => {
           }}
         >
           <Typography>
-            Search results for ‘{searchValue}’
+            Search results for ‘{searchText}’
           </Typography>
         </Toolbar>
 

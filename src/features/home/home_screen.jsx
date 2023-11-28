@@ -70,11 +70,7 @@ const HomeScreen = () => {
           <Box
             component="form"
             onSubmit={() => {
-              navigate('/summarisation', {
-                state: {
-                  searchValue: searchValue,
-                },
-              });
+              navigate('/summarisation/' + searchValue);
             }}
           >
             <TextField
@@ -111,11 +107,7 @@ const HomeScreen = () => {
                   key={tag}
                   label={tag}
                   onClick={() => {
-                    navigate('/summarisation', {
-                      state: {
-                        searchValue: tag,
-                      },
-                    });
+                    navigate('/summarisation/' + tag);
                   }}
                 />
               ))
