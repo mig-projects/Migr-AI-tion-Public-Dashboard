@@ -38,6 +38,10 @@ const SummarisationScreen = () => {
   }, [searchValue, navigate]);
 
   useEffect(() => {
+    if (searchValue === null || searchValue === undefined) {
+      return;
+    }
+
     setLoading(true);
     searchExperiences(searchValue).then( async ({data, error}) => {
       if (error) {
