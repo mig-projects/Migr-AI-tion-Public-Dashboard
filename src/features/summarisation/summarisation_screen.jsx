@@ -34,9 +34,10 @@ const SummarisationScreen = () => {
   useEffect(() => {
     if (searchValue === null || searchValue === undefined) {
       navigate('/home');
-      return;
     }
+  }, [searchValue, navigate]);
 
+  useEffect(() => {
     setLoading(true);
     searchExperiences(searchValue).then( async ({data, error}) => {
       if (error) {
@@ -58,7 +59,7 @@ const SummarisationScreen = () => {
       });
       setLoadingSummary(false);
     });
-  }, [navigate, searchValue]);
+  }, [searchValue]);
 
   return <div id={'summarisation-screen'}>
     <DrawerWrapper>
@@ -195,7 +196,7 @@ const SummarisationScreen = () => {
               <CircularProgress />
             </div> :
               <Typography paragraph>
-                {summary}
+                {`${summary}`}
               </Typography>}
             </Card>
 
