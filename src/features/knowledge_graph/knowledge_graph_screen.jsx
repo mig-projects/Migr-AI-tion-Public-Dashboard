@@ -196,25 +196,63 @@ const KnowledgeGraphScreen = () => {
     }
 
     if (tag) {
+      // Add the tag
       newNodes.push(...nodes.filter((node) => {
         return node.name === tag;
       }));
 
+      // Add all links that have the tag_group (that this tag belongs to) as a source
       const tag_group_name = tags.find((e) => e.name === tag).tag_group;
       newLinks.push(...links.filter((link) => {
         return link.target === tag_group_name;
       }));
 
+      // Add all nodes filtered above, using set to have unique values
       const nodesSet = new Set();
+      newLinks.map((link) => {
+        nodesSet.add(link.source);
+        nodesSet.add(link.target);
+      });
+      newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
+    } else if (tagGroup) {
+      // Add all links that have the tag_group as a source or target
+      newLinks.push(...links.filter((link) => {
+        return link.target === tagGroup || link.source === tagGroup;
+      }));
+
+      // Add all nodes filtered above, using set to have unique values
+      const nodesSet = new Set();
+      newLinks.map((link) => {
+        nodesSet.add(link.source);
+        nodesSet.add(link.target);
+      });
+      newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
+    } else if (category) {
+      // Add all links that have the category as a source
+      newLinks.push(...links.filter((link) => {
+        return link.source === category;
+      }));
+
+      // Add all nodes filtered above, using set to have unique values
+      const nodesSet = new Set();
+      newLinks.map((link) => {
+        nodesSet.add(link.target);
+        nodesSet.add(link.source);
+      });
+
+      // Add all links that have the nodes filtered above as a source
+      newLinks.push(...links.filter((link) => {
+        return nodesSet.has(link.source);
+      }));
+
+      // Add all nodes filtered above, using set to have unique values
+      newLinks.map((link) => {
+        nodesSet.add(link.target);
+        nodesSet.add(link.source);
+      });
+
       newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
     }
-
-    const nodesSet = new Set();
-    newLinks.map((link) => {
-      nodesSet.add(link.source);
-      nodesSet.add(link.target);
-    });
-    newNodes.push(...nodes.filter((node) => nodesSet.has(node.name)));
 
     setFilteredNodes(newNodes);
   }
