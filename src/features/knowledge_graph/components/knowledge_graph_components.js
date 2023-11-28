@@ -14,25 +14,26 @@ const categoriesColor = '#bcabff';
 const headlineColor = '#CECECE';
 
 const fetchTagRelatedExperienceHeadlines = async (tag) => {
-  let headlines = [];
-  await fetchExperienceHeadlinesFromTag(tag).then(({data, error}) => {
+  return await fetchExperienceHeadlinesFromTag(tag).then(({data, error}) => {
     if (error) {
       toast.error(error.message);
+      return [];
     } else {
-      headlines = data.map((experience) => experience.headline);
+      return data;
     }
   });
-  return headlines;
 }
 
 const getHeadlineNodesAndLinks = async (tag) => {
   const headlines = await fetchTagRelatedExperienceHeadlines(tag);
   const nodes = headlines.map((headline) => {
     return {
-      name: headline,
+      name: `${headline.id}`,
       category: 3,
+      value: headline.headline,
       symbolSize: 10,
       label: {
+        formatter: `{c}`,
         fontSize: 10,
         color: '#CECECE',
       },
@@ -40,6 +41,7 @@ const getHeadlineNodesAndLinks = async (tag) => {
         color: headlineColor,
       },
       tooltip: {
+        formatter: `{c}`,
         extraCssText: 'width: 400px; text-overlow: wrap; white-space: normal; word-break: break-word;',
       },
     };
@@ -47,7 +49,7 @@ const getHeadlineNodesAndLinks = async (tag) => {
   const links = headlines.map((headline) => {
     return {
       source: tag,
-      target: headline,
+      target: `${headline.id}`,
     };
   });
   return {
