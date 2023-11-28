@@ -34,8 +34,7 @@ const getHeadlineNodesAndLinks = async (tag) => {
       symbolSize: 10,
       label: {
         formatter: `{c}`,
-        fontSize: 10,
-        color: '#CECECE',
+        fontSize: 11,
       },
       itemStyle: {
         color: headlineColor,
