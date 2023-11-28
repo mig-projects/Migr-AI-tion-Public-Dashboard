@@ -105,6 +105,8 @@ const KnowledgeGraphScreen = () => {
                     tag: event.target.value,
                   });
                   setFilteredNodes(result.nodes);
+                  setHeadlineNodes(result.headlineNodes);
+                  setHeadlineLinks(result.headlineLinks);
 
                   setLoading(false);
                 }}
