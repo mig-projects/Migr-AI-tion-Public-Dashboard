@@ -32,10 +32,19 @@ const fetchExperienceHeadlinesFromTag = async (tag) => {
   return { data, error };
 }
 
+// Search experiences based on a search term
+const searchExperiences = async (searchTerm) => {
+  const { data, error } = await supabase.rpc('search_experiences', {
+    search_value: searchTerm,
+  }).select();
+  return { data, error };
+}
+
 export {
   fetchCategories,
   fetchTagGroups,
   fetchTags,
   fetchLLMGeneratedLinks,
   fetchExperienceHeadlinesFromTag,
+  searchExperiences,
 };

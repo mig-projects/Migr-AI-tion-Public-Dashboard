@@ -13,9 +13,12 @@ import variables from "../../variables.module.scss";
 import {ArrowForward, Search} from "@mui/icons-material";
 import DrawerWrapper from "../drawer_wrapper.jsx";
 import {useNavigate} from "react-router-dom";
+import {useState} from "react";
 
 const HomeScreen = () => {
   const navigate = useNavigate();
+
+  const [searchValue, setSearchValue] = useState('');
 
   return <div id={`home-screen`}>
     <DrawerWrapper>
@@ -67,16 +70,24 @@ const HomeScreen = () => {
           <Box
             component="form"
             onSubmit={() => {
-              navigate('/summarisation');
+              navigate('/summarisation', {
+                state: {
+                  search_value: searchValue,
+                },
+              });
             }}
           >
             <TextField
+              value={searchValue}
               required
               sx={{
                 marginInline: '15px',
               }}
               className={`mb-4`}
               label="Search"
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+              }}
               InputProps={{
                 style: {
                   borderRadius: '12px',
@@ -97,19 +108,31 @@ const HomeScreen = () => {
             <Chip
               label="Women"
               onClick={() => {
-                navigate('/summarisation');
+                navigate('/summarisation', {
+                  state: {
+                    search_value: 'Women',
+                  },
+                });
               }}
             />
             <Chip
               label="Migrant"
               onClick={() => {
-                navigate('/summarisation');
+                navigate('/summarisation', {
+                  state: {
+                    search_value: 'Migrant',
+                  },
+                });
               }}
             />
             <Chip
               label="Parent"
               onClick={() => {
-                navigate('/summarisation');
+                navigate('/summarisation', {
+                  state: {
+                    search_value: 'Parent',
+                  },
+                });
               }}
             />
           </div>
