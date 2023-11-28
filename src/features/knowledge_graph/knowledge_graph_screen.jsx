@@ -341,6 +341,7 @@ const KnowledgeGraphScreen = () => {
                     filterGraph({
                       justNodes: nodes,
                     })
+                    setSelectedValue('');
                   }}
                 >
                   Back to full view
