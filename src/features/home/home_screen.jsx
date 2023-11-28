@@ -72,7 +72,7 @@ const HomeScreen = () => {
             onSubmit={() => {
               navigate('/summarisation', {
                 state: {
-                  search_value: searchValue,
+                  searchValue: searchValue,
                 },
               });
             }}
@@ -105,36 +105,21 @@ const HomeScreen = () => {
           </Box>
 
           <div className={`d-flex gap-2`}>
-            <Chip
-              label="Women"
-              onClick={() => {
-                navigate('/summarisation', {
-                  state: {
-                    search_value: 'Women',
-                  },
-                });
-              }}
-            />
-            <Chip
-              label="Migrant"
-              onClick={() => {
-                navigate('/summarisation', {
-                  state: {
-                    search_value: 'Migrant',
-                  },
-                });
-              }}
-            />
-            <Chip
-              label="Parent"
-              onClick={() => {
-                navigate('/summarisation', {
-                  state: {
-                    search_value: 'Parent',
-                  },
-                });
-              }}
-            />
+            {
+              ['Women', 'Migrant', 'Parent'].map((tag) => (
+                <Chip
+                  key={tag}
+                  label={tag}
+                  onClick={() => {
+                    navigate('/summarisation', {
+                      state: {
+                        searchValue: tag,
+                      },
+                    });
+                  }}
+                />
+              ))
+            }
           </div>
         </div>
 
