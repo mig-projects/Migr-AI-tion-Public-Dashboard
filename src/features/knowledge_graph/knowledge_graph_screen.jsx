@@ -334,6 +334,23 @@ const KnowledgeGraphScreen = () => {
               showLoading={loading}
               notMerge={true}
               lazyUpdate={true}
+              onEvents={{
+                click: (params) => {
+                  if (params.data.category === 0) {
+                    filterGraph({
+                      category: params.data.name,
+                    });
+                  } else if (params.data.category === 1) {
+                    filterGraph({
+                      tagGroup: params.data.name,
+                    });
+                  } else if (params.data.category === 2) {
+                    filterGraph({
+                      tag: params.data.name,
+                    });
+                  }
+                }
+              }}
               option={{
                 title: {
                   display: false,
