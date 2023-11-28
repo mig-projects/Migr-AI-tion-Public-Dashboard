@@ -1,16 +1,18 @@
 import { initializeApp } from "firebase/app";
-import config from "./config.json";
 import { getApp } from "firebase/app";
 import { getFunctions, httpsCallable } from "firebase/functions";
 
+const firebaseKey = import.meta.env.VITE_FIREBASE_API_KEY;
+const firebaseAppID = import.meta.env.VITE_FIREBASE_APP_ID;
+
 const firebaseConfig = {
-  apiKey: config.apiKey,
-  authDomain: config.authDomain,
-  projectId: config.projectId,
-  storageBucket: config.storageBucket,
-  messagingSenderId: config.messagingSenderId,
-  appId: config.appId,
-  measurementId: config.measurementId,
+  apiKey: firebaseKey,
+  authDomain: "migr-ai-tion.firebaseapp.com",
+  projectId: "migr-ai-tion",
+  storageBucket: "migr-ai-tion.appspot.com",
+  messagingSenderId: "155139933891",
+  appId: firebaseAppID,
+  measurementId: "G-22WHCNFXH6"
 };
 
 // Initialize Firebase
