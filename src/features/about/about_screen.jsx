@@ -1,5 +1,5 @@
 import DrawerWrapper from "../drawer_wrapper.jsx";
-import {Box, Link, ListItem, ListItemButton, Toolbar, Typography} from "@mui/material";
+import {Box, Link, ListItem, ListItemButton, Typography} from "@mui/material";
 import variables from "../../variables.module.scss";
 import {ArrowForward} from "@mui/icons-material";
 import EuFounded from "../../assets/images/eu_founded.png";
