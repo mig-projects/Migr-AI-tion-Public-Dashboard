@@ -40,9 +40,13 @@ const KnowledgeGraphScreen = () => {
   const [headlineNodes, setHeadlineNodes] = useState([]);
   const [headlineLinks, setHeadlineLinks] = useState([]);
 
+  const [viewingLLMRelationships, setViewingLLMRelationships] = useState(true);
+
   useEffect(() => {
     setLoading(true);
-    fetchGraphData().then(({
+    fetchGraphData({
+      llmGenerated: viewingLLMRelationships,
+    }).then(({
       categories,
       tagGroups,
       tags,
@@ -80,12 +84,10 @@ const KnowledgeGraphScreen = () => {
 
       setLoading(false);
     });
-  }, [searchedExperiences]);
+  }, [searchedExperiences, viewingLLMRelationships]);
 
   const [selectedValue, setSelectedValue] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
 
   return (
     <div id={'knowledge-graph-screen'}>
@@ -301,11 +303,11 @@ const KnowledgeGraphScreen = () => {
                 height: '50px',
               }}
               onClick={() => {
-                setViewingLLMRelationships(!viewingLLVMRelationships);
+                setViewingLLMRelationships(!viewingLLMRelationships);
               }}
             >
               {
-                viewingLLVMRelationships ? 'View LLM-generated relationships' : 'View Research Oriented relationships'
+                viewingLLMRelationships ? 'View Research Oriented relationships' : 'View LLM-generated relationships'
               }
             </Button>
           </div>

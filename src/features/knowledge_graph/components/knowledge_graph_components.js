@@ -1,7 +1,7 @@
 import {
   fetchCategories,
   fetchExperienceHeadlinesFromTag,
-  fetchLLMGeneratedLinks,
+  fetchGraphLinks,
   fetchTagGroups,
   fetchTags
 } from "../../supabse/database.js";
@@ -102,7 +102,9 @@ const createHeadlineNode = (experience) => ({
   },
 });
 
-const fetchGraphData = async () => {
+const fetchGraphData = async ({
+  llmGenerated = true,
+}) => {
   // First fetch categories
   let categories = [];
   await fetchCategories().then(({data, error}) => {
@@ -145,7 +147,9 @@ const fetchGraphData = async () => {
 
   // Now fetch the relationships
   let relationships = [];
-  await fetchLLMGeneratedLinks().then(({data, error}) => {
+  await fetchGraphLinks({
+    table: llmGenerated ? 'llm_generated_links' : 'research_oriented_links',
+  }).then(({data, error}) => {
     if (error) {
       toast.error(error.message);
     } else {
