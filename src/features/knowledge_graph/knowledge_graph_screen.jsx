@@ -7,7 +7,7 @@ import {
   ListSubheader,
   MenuItem,
   Select,
-  Toolbar,
+  Toolbar, Tooltip,
 } from "@mui/material";
 import {useEffect, useState} from "react";
 import BottomInfo from "./components/bottom_info.jsx";
@@ -40,9 +40,13 @@ const KnowledgeGraphScreen = () => {
   const [headlineNodes, setHeadlineNodes] = useState([]);
   const [headlineLinks, setHeadlineLinks] = useState([]);
 
+  const [viewingLLMRelationships, setViewingLLMRelationships] = useState(false);
+
   useEffect(() => {
     setLoading(true);
-    fetchGraphData().then(({
+    fetchGraphData({
+      llmGenerated: viewingLLMRelationships,
+    }).then(({
       categories,
       tagGroups,
       tags,
@@ -80,12 +84,10 @@ const KnowledgeGraphScreen = () => {
 
       setLoading(false);
     });
-  }, [searchedExperiences]);
+  }, [searchedExperiences, viewingLLMRelationships]);
 
   const [selectedValue, setSelectedValue] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const [viewingLLVMRelationships, setViewingLLMRelationships] = useState(false);
 
   return (
     <div id={'knowledge-graph-screen'}>
@@ -275,39 +277,43 @@ const KnowledgeGraphScreen = () => {
             <BottomInfo
               color={categoriesColor}
               text={'Categories'}
-              tooltipText={'These are the main categories of the stories'}
+              tooltipText={'The research focal points were co-created with participants, experts and LLM-segmentation'}
             />
 
             <BottomInfo
               color={tagGroupsColor}
               text={'Tag Groups'}
-              tooltipText={'These are the tags that are grouped together'}
+              tooltipText={'Are labels self-assigned by the research participants'}
             />
 
             <BottomInfo
               color={tagsColor}
               text={'Tags'}
-              tooltipText={'These are the tags that are used in the stories'}
+              tooltipText={'Organization of tags were mainly done by the researcher'}
             />
 
             <div className={`flex-grow-1`} />
 
-            <Button
-              variant="outlined"
-              color="inherit"
-              sx={{
-                border: '2px solid #D9D9D9',
-                borderRadius: '8px',
-                height: '50px',
-              }}
-              onClick={() => {
-                setViewingLLMRelationships(!viewingLLVMRelationships);
-              }}
-            >
-              {
-                viewingLLVMRelationships ? 'View LLM-generated relationships' : 'View Research Oriented relationships'
-              }
-            </Button>
+            <Tooltip title={
+              viewingLLMRelationships ? '' : `Explore LLM-generated relationships to uncover potential research areas that might have been missed. This feature compares how Large Language Models categorize human attributes, offering insights into AI categorization systems and their role in bias formation.`
+            } arrow>
+              <Button
+                variant="outlined"
+                color="inherit"
+                sx={{
+                  border: '2px solid #D9D9D9',
+                  borderRadius: '8px',
+                  height: '50px',
+                }}
+                onClick={() => {
+                  setViewingLLMRelationships(!viewingLLMRelationships);
+                }}
+              >
+                {
+                  viewingLLMRelationships ? 'View Research Oriented relationships' : 'View LLM-generated relationships'
+                }
+              </Button>
+            </Tooltip>
           </div>
         </Box>
       </DrawerWrapper>
