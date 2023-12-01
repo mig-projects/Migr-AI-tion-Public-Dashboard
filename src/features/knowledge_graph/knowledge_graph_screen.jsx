@@ -277,19 +277,19 @@ const KnowledgeGraphScreen = () => {
             <BottomInfo
               color={categoriesColor}
               text={'Categories'}
-              tooltipText={'These are the main categories of the stories'}
+              tooltipText={'The research focal points were co-created with participants, experts and LLM-segmentation'}
             />
 
             <BottomInfo
               color={tagGroupsColor}
               text={'Tag Groups'}
-              tooltipText={'These are the tags that are grouped together'}
+              tooltipText={'Are labels self-assigned by the research participants'}
             />
 
             <BottomInfo
               color={tagsColor}
               text={'Tags'}
-              tooltipText={'These are the tags that are used in the stories'}
+              tooltipText={'Organization of tags were mainly done by the researcher'}
             />
 
             <div className={`flex-grow-1`} />
