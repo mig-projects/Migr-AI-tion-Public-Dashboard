@@ -5,7 +5,7 @@
 
 ---
 
-<p align="center"> Participant Dashboard for FIND HR Project
+<p align="center"> Public Dashboard for FIND HR Project
     <br>
 </p>
 
@@ -18,7 +18,7 @@
 - [Acknowledgments](#acknowledgement)
 
 ## 🧐 About <a name = "about"></a>
-This project is a web app that allows users to speak about their discriminatory experiences.
+This project is a web app that allows users to query the database and visualize the published discriminatory experiences of FIND HR Participants. Users can either search experiences based on a specific keyword or interact with the knowledge graph to find experiences related to a specific topic.
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -94,6 +94,7 @@ Your app is ready to be deployed!
 - [ReactJS](https://react.dev/) - Framework
 - [ViteJS](https://vitejs.dev/) - Build Tool
 - [Supabase](https://supabase.com/) - Backend
+- [Firebase](https://firebase.google.com/) - Cloud Functions
 
 ## ✍️ Authors <a name = "authors"></a>
 - [@awais-amjed](https://github.com/awais-amjed) - Full Stack Developer
