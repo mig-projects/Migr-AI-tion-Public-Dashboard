@@ -1,0 +1,14 @@
+{
+  "hosting": {
+    "site": "migr-ai-tion-public-preview",
+    "source": ".",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "frameworksBackend": {
+      "region": "us-central1"
+    }
+  }
+}
