@@ -31,8 +31,6 @@ const SummarisationScreen = () => {
   const [summary, setSummary] = useState('');
 
   useEffect(() => {
-    console.log(searchText);
-
     if (searchText === null || searchText === undefined) {
       return;
     }
